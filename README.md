@@ -71,7 +71,7 @@ Welcome to the Web3 Based Chess Game! This is a decentralized chess platform whe
 ---
 
 ## Issues and Contributions
-Check the [CONTRIBUTE.md](./CONTRIBUTE.md) file for detailed information on known issues and how you can contribute.
+Check the [CONTRIBUTE.md](https://github.com/Navneet1206/Ether-Chess-OTC/blob/main/CONTRIBUTING.md) file for detailed information on known issues and how you can contribute.
 
 ---
 
