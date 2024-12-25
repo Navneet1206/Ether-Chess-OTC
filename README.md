@@ -2,7 +2,7 @@
 # Web3 Based Chess Game
 
 Welcome to the Web3 Based Chess Game! This is a decentralized chess platform where users can play chess online, connect their Ethereum wallets, and stake ETH in games.
-
+Preview [link](https://web3-chess.netlify.app/)
 ---
 
 ## Features
