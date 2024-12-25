@@ -18,16 +18,17 @@ Welcome to the Web3 Based Chess Game! This is a decentralized chess platform whe
 ### 1. Home Screen
 ![Home Screen Preview](./MockDown%20images/Chess-home.png)
 
----
-
 ### 2. Bot Mode
 ![Bot Mode Preview](./MockDown%20images/Botmode.png)
 
-
----
-
-### 4. Game Created Alert
+### 3. Game Created Alert
 ![Game Created Alert Preview](./MockDown%20images/game%20created.png)
+
+### 4. Local Installation
+![Local Installation Preview](./MockDown%20images/local_install.png)
+
+### 5. Local Run
+![Local Run Preview](./MockDown%20images/local_run.png)
 
 ---
 
@@ -71,7 +72,7 @@ Welcome to the Web3 Based Chess Game! This is a decentralized chess platform whe
 ---
 
 ## Issues and Contributions
-Check the [CONTRIBUTE.md](https://github.com/Navneet1206/Ether-Chess-OTC/blob/main/CONTRIBUTING.md) file for detailed information on known issues and how you can contribute.
+Check the [CONTRIBUTING.md](https://github.com/Navneet1206/Ether-Chess-OTC/blob/main/CONTRIBUTING.md) file for detailed information on known issues and how you can contribute.
 
 ---
 
@@ -99,4 +100,4 @@ For any queries or support, feel free to open an issue on GitHub or contact the 
 ---
 
 Happy Chess Gaming! 🏆
-```
+

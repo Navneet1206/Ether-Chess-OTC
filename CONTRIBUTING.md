@@ -47,8 +47,6 @@ This is an online chess platform built using React, Ethereum, and Web3.js. Playe
    - **Description**: The application currently uses `alert()` for notifications, which is disruptive and not user-friendly.
    - **Improvement**: Replace `alert()` with a modal-based popup component for better UX.
 
-   
-
 ---
 
 ### 5. **Missing Loaders**
@@ -58,8 +56,6 @@ This is an online chess platform built using React, Ethereum, and Web3.js. Playe
      - Wallet connection
      - Payment processing
      - Chess game initialization
-
-
 
 ---
 
@@ -113,6 +109,12 @@ Follow the instructions in the `README.md` file to set up your local environment
    ```
 2. Test various scenarios, such as moving pieces, pawn promotion, and responsive navigation.
 3. Ensure no regressions are introduced.
+
+### 4. Local Installation
+![Local Installation Preview](./MockDown%20images/local_install.png)
+
+### 5. Local Run
+![Local Run Preview](./MockDown%20images/local_run.png)
 
 ### Step 5: Submit a Pull Request
 1. Push your changes to your forked repository.
