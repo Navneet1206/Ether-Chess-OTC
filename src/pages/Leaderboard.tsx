@@ -22,7 +22,7 @@ const mockLeaderboard: LeaderboardEntry[] = [
 
 export const Leaderboard: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 mb-64">
       <div className="bg-white rounded-lg shadow-sm">
         <div className="p-6 border-b">
           <div className="flex items-center gap-4">

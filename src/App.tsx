@@ -6,6 +6,7 @@ import { FreeMode } from './pages/FreeMode';
 import { BotMode } from './pages/BotMode';
 import { OnlineMode } from './pages/OnlineMode';
 import { Leaderboard } from './pages/Leaderboard';
+import { Footer } from './components/Footer';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/play/online" element={<OnlineMode />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
+        <Footer/>
       </div>
     </Router>
   );
