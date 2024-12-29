@@ -19,11 +19,27 @@ export const BotMode: React.FC = () => {
   // Ref to track if initial setup is done
   const isInitialSetupRef = useRef(false);
 
+  // Determine game outcome
+  const determineGameOutcome = useCallback((currentGame: Chess) => {
+    let gameWinner: 'white' | 'black' | 'draw' | null = null;
+
+    if (currentGame.isCheckmate()) {
+      gameWinner = currentGame.turn() === 'w' ? 'black' : 'white';
+    } else if (currentGame.isDraw()) {
+      gameWinner = 'draw';
+    }
+
+    setGameOver(true);
+    setWinner(gameWinner);
+    
+    return gameWinner;
+  }, []);
+
   // Bot move logic with advanced strategy
   const makeBotMove = useCallback(() => {
     // Prevent moves if game is over
     if (game.isGameOver()) {
-      determineGameOutcome();
+      determineGameOutcome(game);
       return;
     }
 
@@ -36,7 +52,7 @@ export const BotMode: React.FC = () => {
       const possibleMoves = gameCopy.moves({ verbose: true });
 
       if (possibleMoves.length === 0) {
-        determineGameOutcome();
+        determineGameOutcome(gameCopy);
         return;
       }
 
@@ -85,21 +101,11 @@ export const BotMode: React.FC = () => {
 
         // Check for game over
         if (gameCopy.isGameOver()) {
-          determineGameOutcome();
+          determineGameOutcome(gameCopy);
         }
       }
     }
-  }, [game, difficulty]);
-
-  // Determine game outcome
-  const determineGameOutcome = useCallback(() => {
-    setGameOver(true);
-    if (game.isCheckmate()) {
-      setWinner(game.turn() === 'w' ? 'black' : 'white');
-    } else if (game.isDraw()) {
-      setWinner('draw');
-    }
-  }, [game]);
+  }, [game, difficulty, determineGameOutcome]);
 
   // Handle player move
   const handlePlayerMove = useCallback((move: { from: string; to: string }) => {
@@ -119,7 +125,7 @@ export const BotMode: React.FC = () => {
 
         // Check for game over after player move
         if (gameCopy.isGameOver()) {
-          determineGameOutcome();
+          determineGameOutcome(gameCopy);
           return;
         }
 
@@ -172,7 +178,9 @@ export const BotMode: React.FC = () => {
                 <h3 className="text-xl font-bold">
                   {winner === 'draw' 
                     ? 'Game is a Draw!' 
-                    : `${winner?.toUpperCase()} Wins!`}
+                    : winner 
+                      ? `${winner.charAt(0).toUpperCase() + winner.slice(1)} Wins!` 
+                      : 'Game Over!'}
                 </h3>
               </div>
             )}
