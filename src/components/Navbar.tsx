@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Sword } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { WalletConnect } from './WalletConnect';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +72,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => console.log('Connect wallet')}
                 className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 hover:text-blue-300 px-4 py-2 rounded-lg border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300"
               >
-                Connect Wallet
+                <WalletConnect />
               </button>
             </div>
           </div>
@@ -131,7 +132,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => console.log('Connect wallet')}
                 className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 hover:text-blue-300 px-4 py-2 rounded-lg border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 mt-4"
               >
-                Connect Wallet
+                <WalletConnect />
               </button>
             </div>
           </div>
