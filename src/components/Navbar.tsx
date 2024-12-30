@@ -1,63 +1,139 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { WalletConnect } from './WalletConnect';
 import { Sword } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { WalletConnect } from './WalletConnect';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const navigate = useNavigate();
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
 
+  const handleNavigation = (path: string) => {
+    navigate(path); // Navigate to the specified path
+  };
+
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-gradient-to-r from-gray-900 via-indigo-950 to-gray-900 border-b border-white/10 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center gap-2">
-              <Sword size={32} className="text-blue-600" />
-              <span className="text-xl font-bold">Web3 Chess</span>
-            </Link>
+            <button 
+              onClick={() => handleNavigation('/')} 
+              className="flex items-center gap-2 group"
+            >
+              <div className="relative">
+                <Sword size={32} className="text-blue-400 group-hover:text-blue-300 transition-colors" />
+                <span className="absolute -top-1 -right-1 text-lg">♔</span>
+              </div>
+              <span className="text-xl font-bold text-white">Web3 Chess</span>
+            </button>
           </div>
+
           <div className="sm:hidden">
-            <button onClick={toggleNavbar} className="text-gray-900 focus:outline-none">
-              {/* Hamburger Icon */}
+            <button 
+              onClick={toggleNavbar} 
+              className="text-white focus:outline-none"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
               </svg>
             </button>
           </div>
-          <div className="hidden sm:flex sm:ml-6 sm:space-x-8">
-            <Link to="/play/free" className="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium">Free Mode</Link>
-            <Link to="/play/bot" className="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium">Bot Mode</Link>
-            <Link to="/play/online" className="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium">Online Mode</Link>
-            <Link to="/leaderboard" className="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium">Leaderboard</Link>
-            {/* Wallet Connect Button on Large Screens */}
-            <div className="ml-auto">
-              <WalletConnect />
+
+          <div className="hidden sm:flex sm:ml-6 sm:items-center sm:space-x-8">
+            <button 
+              onClick={() => handleNavigation('/play/free')} 
+              className="text-blue-200/70 hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors"
+            >
+              Practice Mode
+            </button>
+            <button 
+              onClick={() => handleNavigation('/play/bot')} 
+              className="text-blue-200/70 hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors"
+            >
+              Bot Challenge
+            </button>
+            <button 
+              onClick={() => handleNavigation('/play/online')} 
+              className="text-blue-200/70 hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors"
+            >
+              Tournament Mode
+            </button>
+            <button 
+              onClick={() => handleNavigation('/leaderboard')} 
+              className="text-blue-200/70 hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors"
+            >
+              Leaderboard
+            </button>
+            <div className="ml-4">
+              <button
+                onClick={() => console.log('Connect wallet')}
+                className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 hover:text-blue-300 px-4 py-2 rounded-lg border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300"
+              >
+                <WalletConnect />
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Side Navbar for Medium and Small Screens */}
+      {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
+        <div className="fixed inset-0 bg-gray-900/98 backdrop-blur-sm z-50 overflow-y-auto">
           <div className="flex flex-col p-4">
-            <button onClick={toggleNavbar} className="self-end mb-4 text-gray-900 focus:outline-none">
-              {/* Close Icon */}
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <Link to="/play/free" className="text-gray-900 hover:text-blue-600 py-2">Free Mode</Link>
-            <Link to="/play/bot" className="text-gray-900 hover:text-blue-600 py-2">Bot Mode</Link>
-            <Link to="/play/online" className="text-gray-900 hover:text-blue-600 py-2">Online Mode</Link>
-            <Link to="/leaderboard" className="text-gray-900 hover:text-blue-600 py-2">Leaderboard</Link>
-            {/* Wallet Connect Button in Side Navbar */}
-            <div className="mt-auto">
-              <WalletConnect />
+            <div className="flex justify-between items-center mb-8">
+              <button 
+                onClick={() => handleNavigation('/')} 
+                className="flex items-center gap-2"
+              >
+                <div className="relative">
+                  <Sword size={32} className="text-blue-400" />
+                  <span className="absolute -top-1 -right-1 text-lg">♔</span>
+                </div>
+                <span className="text-xl font-bold text-white">Web3 Chess</span>
+              </button>
+              <button 
+                onClick={toggleNavbar} 
+                className="text-white focus:outline-none"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex flex-col space-y-4">
+              <button 
+                onClick={() => handleNavigation('/play/free')} 
+                className="text-blue-200/70 hover:text-blue-400 py-2 text-lg font-medium transition-colors"
+              >
+                Practice Mode
+              </button>
+              <button 
+                onClick={() => handleNavigation('/play/bot')} 
+                className="text-blue-200/70 hover:text-blue-400 py-2 text-lg font-medium transition-colors"
+              >
+                AI Challenge
+              </button>
+              <button 
+                onClick={() => handleNavigation('/play/online')} 
+                className="text-blue-200/70 hover:text-blue-400 py-2 text-lg font-medium transition-colors"
+              >
+                Tournament Mode
+              </button>
+              <button 
+                onClick={() => handleNavigation('/leaderboard')} 
+                className="text-blue-200/70 hover:text-blue-400 py-2 text-lg font-medium transition-colors"
+              >
+                Leaderboard
+              </button>
+              <button
+                onClick={() => console.log('Connect wallet')}
+                className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 hover:text-blue-300 px-4 py-2 rounded-lg border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 mt-4"
+              >
+                <WalletConnect />
+              </button>
             </div>
           </div>
         </div>
