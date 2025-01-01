@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { useWalletStore } from '../store/useWalletStore';
 import { ethers } from 'ethers';
 import { ArrowUp, ArrowDown } from 'lucide-react';
@@ -33,12 +33,14 @@ export const OnlineMode = () => {
     }
   };
 
-  const handleStakeChange = (newStake) => {
+  const handleStakeChange = (increment) => {
+    const newStake = parseFloat((stake + increment).toFixed(2));
+    console.log('Current stake:', stake);
+    console.log('New stake:', newStake);
     if (newStake >= 0.01 && newStake <= 1.0) {
-      setStake(parseFloat(newStake.toFixed(2)));
+      setStake(newStake);
     }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-950 via-gray-900 to-indigo-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background Chessboard Pattern */}
@@ -64,33 +66,24 @@ export const OnlineMode = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Range Input for Stake Selection */}
+            {/* Stake Selection with Buttons */}
             <div>
               <label className="block text-white font-medium mb-3">Select Stake (ETH)</label>
               <div className="flex items-center gap-4">
                 <button
-                  onClick={() => handleStakeChange(stake - 0.01)}
+                  onClick={() => handleStakeChange(-0.01)}
                   className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
                 >
                   <ArrowDown size={18} />
                 </button>
-                <input
-                  type="range"
-                  min="0.01"
-                  max="1.0"
-                  step="0.01"
-                  value={stake}
-                  onChange={(e) => handleStakeChange(parseFloat(e.target.value))}
-                  className="flex-1 h-2 rounded-lg bg-gray-700 accent-indigo-500"
-                />
+                <div className="text-white text-lg">{stake.toFixed(2)} ETH</div>
                 <button
-                  onClick={() => handleStakeChange(stake + 0.01)}
+                  onClick={() => handleStakeChange(0.01)}
                   className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
                 >
                   <ArrowUp size={18} />
                 </button>
               </div>
-              <p className="text-center text-white mt-2">{stake.toFixed(2)} ETH</p>
             </div>
 
             {/* Create and Join Buttons */}
