@@ -1,136 +1,372 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import { useWalletStore } from '../store/useWalletStore';
+import { socketService } from '../services/socketService';
+import { Chessboard } from '../components/Chessboard';
 import { ethers } from 'ethers';
-import { ArrowUp, ArrowDown } from 'lucide-react';
+import { useGameStore } from '../store/useGameStore';
+import { AlertCircle, Check, Loader2, ArrowUp, ArrowDown } from 'lucide-react';
+
+const Button = ({ 
+  children, 
+  onClick, 
+  disabled, 
+  variant = 'primary', 
+  className = '',
+  loading = false 
+}) => {
+  const baseStyles = "px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2";
+  const variants = {
+    primary: "bg-indigo-600 hover:bg-indigo-500 text-white disabled:hover:bg-indigo-600",
+    secondary: "bg-gray-700 hover:bg-gray-600 text-white",
+    outline: "border border-white/10 bg-gray-800 hover:bg-gray-700 text-white"
+  };
+
+  return (
+    <button 
+      onClick={onClick} 
+      disabled={disabled || loading} 
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+    >
+      {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+      {children}
+    </button>
+  );
+};
+
+const Input = ({ label, ...props }) => (
+  <div className="space-y-2">
+    {label && <label className="block text-sm font-medium text-white">{label}</label>}
+    <input
+      {...props}
+      className="w-full px-4 py-3 bg-gray-800 text-white border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    />
+  </div>
+);
+
+const Dialog = ({ open, onClose, title, description, children }) => {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative bg-gray-900 rounded-lg p-6 max-w-md w-full mx-4 space-y-4 border border-white/10">
+        {title && <h2 className="text-xl font-semibold text-white">{title}</h2>}
+        {description && <p className="text-gray-300">{description}</p>}
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const chessGameABI = [
+  "function createGame(string calldata gameId) external payable",
+  "function joinGame(string calldata gameId) external payable",
+  "function games(string calldata) external view returns (address white, address black, uint256 stake, bool isActive, address winner, uint256 startTime)"
+];
 
 export const OnlineMode = () => {
-  const { signer } = useWalletStore();
+  const { address, signer, provider } = useWalletStore();
+  const { gameState, setGameState } = useGameStore();
   const [gameId, setGameId] = useState(null);
-  const [stake, setStake] = useState(0.01);
+  const [stake, setStake] = useState(0.0001);
+  const [error, setError] = useState(null);
+  const [contractAddress] = useState('0xA12E9052EDbffCA633eBe3Fc9B3F477E516d4D43');
+  const [isJoinGameDialogOpen, setIsJoinGameDialogOpen] = useState(false);
+  const [joinGameId, setJoinGameId] = useState('');
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const [isCreatingGame, setIsCreatingGame] = useState(false);
   const [isJoiningGame, setIsJoiningGame] = useState(false);
-  const [joinGameId, setJoinGameId] = useState('');
-  const [error, setError] = useState(null);
+  const [isVerifyingGame, setIsVerifyingGame] = useState(false);
+
+  const MIN_STAKE = 0.0001;
+  const MAX_STAKE = 0.1;
+  const STAKE_INCREMENT = 0.0001;
+
+  useEffect(() => {
+    if (gameState?.gameId) {
+      setGameId(gameState.gameId);
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    socketService.onGameState((state) => {
+      setGameState(state);
+    });
+    return () => {
+      socketService.disconnect();
+    };
+  }, [setGameState]);
+
+  const handleStakeChange = (increment) => {
+    setStake(prevStake => {
+      const newStake = parseFloat((prevStake + increment).toFixed(4));
+      return newStake >= MIN_STAKE && newStake <= MAX_STAKE ? newStake : prevStake;
+    });
+  };
+
+  const handleStakeInput = (event) => {
+    const value = event.target.value;
+    if (value === '') {
+      setStake(MIN_STAKE);
+      return;
+    }
+
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue)) {
+      const roundedValue = parseFloat(numValue.toFixed(4));
+      if (roundedValue >= MIN_STAKE && roundedValue <= MAX_STAKE) {
+        setStake(roundedValue);
+      } else if (roundedValue < MIN_STAKE) {
+        setStake(MIN_STAKE);
+      } else if (roundedValue > MAX_STAKE) {
+        setStake(MAX_STAKE);
+      }
+    }
+  };
+
+  const showToast = (message) => {
+    setSuccessMessage(message);
+    setShowSuccessToast(true);
+    setTimeout(() => setShowSuccessToast(false), 5000);
+  };
+
+  const verifyGameExists = async (gameId) => {
+    if (!provider) return false;
+    setIsVerifyingGame(true);
+    try {
+      const contract = new ethers.Contract(contractAddress, chessGameABI, provider);
+      const gameDetails = await contract.games(gameId);
+      return gameDetails.white !== ethers.ZeroAddress;
+    } catch (error) {
+      console.error('Error verifying game:', error);
+      return false;
+    } finally {
+      setIsVerifyingGame(false);
+    }
+  };
 
   const handleCreateGame = async () => {
+    if (!address || !signer || !provider) {
+      setError('Please connect your wallet first');
+      return;
+    }
+
+    if (stake < MIN_STAKE || stake > MAX_STAKE) {
+      setError(`Stake must be between ${MIN_STAKE} and ${MAX_STAKE} ETH`);
+      return;
+    }
+
     setIsCreatingGame(true);
     setError(null);
+
     try {
       const stakeInWei = ethers.parseEther(stake.toString());
-      const gameContract = new ethers.Contract(
-        '0xA12E9052EDbffCA633eBe3Fc9B3F477E516d4D43',
-        ["function createGame(string calldata gameId) external payable"],
-        signer
-      );
+      const contract = new ethers.Contract(contractAddress, chessGameABI, signer);
       const generatedGameId = Math.random().toString(36).substring(7);
-      const tx = await gameContract.createGame(generatedGameId, { value: stakeInWei });
+
+      const tx = await contract.createGame(generatedGameId, {
+        value: stakeInWei,
+        gasLimit: (await contract.createGame.estimateGas(generatedGameId, { value: stakeInWei })) * 12n / 10n
+      });
+
+      showToast('Transaction submitted. Waiting for confirmation...');
       await tx.wait();
+
+      const gameExists = await verifyGameExists(generatedGameId);
+      if (!gameExists) {
+        throw new Error('Game creation failed on blockchain');
+      }
+
+      await socketService.connect(address, 'Player');
+      await socketService.createGame(stake);
+
       setGameId(generatedGameId);
-    } catch (err) {
-      setError(err.message);
+      showToast(`Game created successfully! Game ID: ${generatedGameId}`);
+    } catch (error) {
+      console.error('Error creating game:', error);
+      setError(error.message || 'Failed to create game');
     } finally {
       setIsCreatingGame(false);
     }
   };
 
-  const handleStakeChange = (increment) => {
-    const newStake = parseFloat((stake + increment).toFixed(2));
-    console.log('Current stake:', stake);
-    console.log('New stake:', newStake);
-    if (newStake >= 0.01 && newStake <= 1.0) {
-      setStake(newStake);
+  const handleJoinGame = async () => {
+    if (!address || !signer || !provider) {
+      setError('Please connect your wallet first');
+      return;
+    }
+
+    if (!joinGameId.trim()) {
+      setError('Please enter a valid Game ID');
+      return;
+    }
+
+    setIsJoiningGame(true);
+    setError(null);
+
+    try {
+      const contract = new ethers.Contract(contractAddress, chessGameABI, provider);
+      const gameDetails = await contract.games(joinGameId);
+
+      if (gameDetails.white === ethers.ZeroAddress) {
+        throw new Error('Game does not exist');
+      }
+
+      if (gameDetails.black !== ethers.ZeroAddress) {
+        throw new Error('Game is already full');
+      }
+
+      const contractWithSigner = new ethers.Contract(contractAddress, chessGameABI, signer);
+      const tx = await contractWithSigner.joinGame(joinGameId, {
+        value: gameDetails.stake,
+        gasLimit: (await contractWithSigner.joinGame.estimateGas(joinGameId, { value: gameDetails.stake })) * 12n / 10n
+      });
+
+      showToast('Transaction submitted. Waiting for confirmation...');
+      await tx.wait();
+
+      await socketService.connect(address, 'Player');
+      await socketService.joinGame(joinGameId);
+
+      setGameId(joinGameId);
+      setIsJoinGameDialogOpen(false);
+      showToast('Successfully joined the game!');
+    } catch (error) {
+      console.error('Error joining game:', error);
+      setError(error.message || 'Failed to join game');
+    } finally {
+      setIsJoiningGame(false);
     }
   };
+
+  const handleMove = (move) => {
+    if (gameId) {
+      socketService.makeMove(gameId, move);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-950 via-gray-900 to-indigo-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background Chessboard Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="grid grid-cols-8 h-full">
-          {[...Array(64)].map((_, i) => (
-            <div
-              key={i}
-              className={`aspect-square ${
-                (Math.floor(i / 8) + i % 8) % 2 === 0 ? 'bg-white' : 'bg-transparent'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+      <div className="bg-gradient-to-br from-gray-900/80 to-indigo-900/80 p-10 rounded-xl border border-white/10 shadow-xl max-w-4xl w-full">
+        <h1 className="text-3xl font-bold text-white text-center mb-8">Online Chess Game</h1>
 
-      <div className="bg-gradient-to-br from-gray-900/80 to-indigo-900/80 p-10 rounded-xl border border-white/10 shadow-xl max-w-xl w-full">
-        <h2 className="text-3xl font-bold text-white text-center mb-8">Online Mode</h2>
-
-        {gameId ? (
-          <div>
-            <p className="text-white text-center">Game ID: {gameId}</p>
+        {error && (
+          <div className="mb-6 flex items-center gap-2 rounded-lg border border-red-500/10 bg-red-500/10 p-4 text-red-400">
+            <AlertCircle className="h-5 w-5" />
+            <span>{error}</span>
           </div>
-        ) : (
+        )}
+
+        {showSuccessToast && (
+          <div className="fixed bottom-4 right-4 flex items-center gap-2 rounded-lg border border-green-500/10 bg-green-500/10 p-4 text-green-400 shadow-lg">
+            <Check className="h-5 w-5" />
+            <span>{successMessage}</span>
+          </div>
+        )}
+
+        {!gameId ? (
           <div className="space-y-6">
-            {/* Stake Selection with Buttons */}
             <div>
               <label className="block text-white font-medium mb-3">Select Stake (ETH)</label>
               <div className="flex items-center gap-4">
                 <button
-                  onClick={() => handleStakeChange(-0.01)}
-                  className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+                  onClick={() => handleStakeChange(-STAKE_INCREMENT)}
+                  className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+                  disabled={stake <= MIN_STAKE}
                 >
                   <ArrowDown size={18} />
                 </button>
-                <div className="text-white text-lg">{stake.toFixed(2)} ETH</div>
+                <div className="relative flex-1">
+                  <input
+                    type="number"
+                    value={stake}
+                    onChange={handleStakeInput}
+                    step={STAKE_INCREMENT}
+                    min={MIN_STAKE}
+                    max={MAX_STAKE}
+                    className="w-full bg-gray-800 text-white text-center py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                  />
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    ETH
+                  </span>
+                </div>
                 <button
-                  onClick={() => handleStakeChange(0.01)}
-                  className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+                  onClick={() => handleStakeChange(STAKE_INCREMENT)}
+                  className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+                  disabled={stake >= MAX_STAKE}
                 >
                   <ArrowUp size={18} />
                 </button>
               </div>
+              <p className="text-gray-400 text-sm mt-2">Min: {MIN_STAKE} ETH - Max: {MAX_STAKE} ETH</p>
             </div>
 
-            {/* Create and Join Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <button
+              <Button
                 onClick={handleCreateGame}
-                disabled={isCreatingGame}
-                className="flex-1 bg-indigo-600 text-white py-4 rounded-lg text-lg shadow-lg hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!address || isCreatingGame || stake < MIN_STAKE || stake > MAX_STAKE}
+                loading={isCreatingGame}
+                className="flex-1 py-4 text-lg"
               >
                 {isCreatingGame ? 'Creating Game...' : 'Create Game'}
-              </button>
-              <button
-                onClick={() => setIsJoiningGame(true)}
-                className="flex-1 bg-gray-700 text-white py-4 rounded-lg text-lg shadow-lg hover:bg-gray-600"
+              </Button>
+              <Button
+                onClick={() => setIsJoinGameDialogOpen(true)}
+                disabled={!address}
+                variant="secondary"
+                className="flex-1 py-4 text-lg"
               >
                 Join Game
-              </button>
+              </Button>
             </div>
-
-            {/* Join Game ID Input */}
-            {isJoiningGame && (
-              <div>
-                <label className="block text-white font-medium mt-6">Enter Game ID</label>
-                <input
-                  type="text"
-                  value={joinGameId}
-                  onChange={(e) => setJoinGameId(e.target.value)}
-                  className="block w-full rounded-lg bg-gray-800 text-white py-3 px-4 mt-2"
-                  placeholder="Game ID"
-                />
-                <button
-                  onClick={() => console.log('Joining game:', joinGameId)}
-                  className="mt-4 w-full bg-indigo-600 text-white py-3 rounded-lg text-lg shadow-lg hover:bg-indigo-500"
-                >
-                  Join Game
-                </button>
-              </div>
-            )}
-
-            {/* Error Message */}
-            {error && (
-              <div className="text-red-400 text-sm text-center mt-4">
-                <p>{error}</p>
-              </div>
-            )}
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <div className="bg-gray-800/50 rounded-lg p-4">
+              <p className="text-sm font-medium text-white">
+                Game ID: <span className="text-indigo-400 font-mono">{gameId}</span>
+              </p>
+            </div>
+            <div className="aspect-square w-full max-w-2xl mx-auto">
+              <Chessboard 
+                position={gameState?.position || 'start'} 
+                onMove={handleMove}
+                orientation={gameState?.players?.white?.address === address ? 'white' : 'black'}
+              />
+            </div>
           </div>
         )}
+
+        <Dialog
+          open={isJoinGameDialogOpen}
+          onClose={() => setIsJoinGameDialogOpen(false)}
+          title="Join Game"
+          description="Enter the Game ID to join an existing game"
+        >
+          <div className="space-y-4">
+            <Input
+              placeholder="Enter Game ID"
+              value={joinGameId}
+              onChange={(e) => setJoinGameId(e.target.value)}
+            />
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setIsJoinGameDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleJoinGame}
+                disabled={!joinGameId.trim() || isJoiningGame}
+                loading={isJoiningGame}
+              >
+                {isJoiningGame ? 'Joining...' : 'Join Game'}
+              </Button>
+            </div>
+          </div>
+        </Dialog>
       </div>
     </div>
   );
