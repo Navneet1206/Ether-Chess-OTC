@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trophy, Crown, Medal, Award } from 'lucide-react';
+import { Trophy, Crown, Award, Medal } from 'lucide-react';
 
 interface LeaderboardEntry {
   address: string;
@@ -52,8 +52,8 @@ export const Leaderboard: React.FC = () => {
     switch (index) {
       case 0:
         return <Crown className="text-yellow-400 h-6 w-6" />;
-      case 1:
-        return <Medal className="text-gray-300 h-6 w-6" />;
+  case 1:
+    return <Medal className="text-gray-400 h-6 w-6" />;
       case 2:
         return <Award className="text-amber-600 h-6 w-6" />;
       default:
