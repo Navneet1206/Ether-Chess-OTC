@@ -26,7 +26,7 @@ class SocketService {
 
   private createSocketConnection(address: string, username: string) {
     try {
-      this.socket = io('https://web3-chess-otc.vercel.app', {
+      this.socket = io('http://localhost:3001', {
         query: { 
           address: address.toLowerCase(), 
           username: username.trim()

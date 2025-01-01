@@ -8,21 +8,21 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
-},
+  },
   "dependencies": {
+    "@openzeppelin/contracts": "^5.0.1",
+    "chess.js": "^1.0.0-beta.7",
+    "ethers": "^6.11.1",
+    "express": "^4.18.3",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "ethers": "^6.11.1",
-    "chess.js": "^1.0.0-beta.7",
     "react-chessboard": "^4.4.0",
+    "react-dom": "^18.3.1",
     "react-router-dom": "^6.22.2",
-    "zustand": "^4.5.2",
-    "socket.io-client": "^4.7.4",
-    "express": "^4.18.3",
     "socket.io": "^4.7.4",
+    "socket.io-client": "^4.7.4",
     "stockfish.js": "^10.0.2",
-    "@openzeppelin/contracts": "^5.0.1"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

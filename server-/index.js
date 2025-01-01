@@ -6,7 +6,7 @@ import cors from 'cors';  // Make sure to install with: npm install cors
 
 const app = express();
 app.use(cors({
-  origin: 'https://web3-chess.netlify.app',  // Your Vite dev server
+  origin: 'http://localhost:5173/',  // Your Vite dev server
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -14,7 +14,7 @@ app.use(cors({
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: 'https://web3-chess.netlify.app',
+    origin: 'http://localhost:5173/',
     methods: ['GET', 'POST'],
   }
 });
@@ -184,5 +184,5 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3001;
 httpServer.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`http://localhost:${PORT}`);
 });
