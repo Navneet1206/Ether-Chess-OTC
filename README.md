@@ -19,6 +19,13 @@ Preview [link](https://web3-chess.netlify.app/)
       </a><br />
       <sub>UI-Contributions</sub>
     </td>
+    <td align="center">
+      <a href="https://github.com/yashpandav">
+        <img src="https://github.com/yashpandav.png" width="100px;" alt="Yash Pandav"/><br />
+        <sub><b>Yash Pandav</b></sub>
+      </a><br />
+      <sub>Botmode-finishing-functionality-Contributions</sub>
+    </td>
   </tr>
 </table>
 
