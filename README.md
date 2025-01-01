@@ -17,7 +17,7 @@ Preview [link](https://web3-chess.netlify.app/)
         <img src="https://github.com/yashvisharma1204.png" width="100px;" alt="Yashvi Sharma"/><br />
         <sub><b>Yashvi Sharma</b></sub>
       </a><br />
-      <sub>UI-Contributions</sub>
+      <sub>Website-UI-Contributions</sub>
     </td>
     <td align="center">
       <a href="https://github.com/yashpandav">
