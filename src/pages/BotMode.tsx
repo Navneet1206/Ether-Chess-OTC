@@ -8,7 +8,6 @@ import { Bot } from 'lucide-react';
 type Difficulty = keyof typeof BOT_DIFFICULTY_LEVELS;
 
 export const BotMode: React.FC = () => {
-  // Game state management
   const [game, setGame] = useState(new Chess());
   const [position, setPosition] = useState(game.fen());
   const [difficulty, setDifficulty] = useState<Difficulty>('MEDIUM');
@@ -18,9 +17,22 @@ export const BotMode: React.FC = () => {
 
   const isInitialSetupRef = useRef(false);
 
+  const determineGameOutcome = useCallback((currentGame: Chess) => {
+    let gameWinner: 'white' | 'black' | 'draw' | null = null;
+
+    if (currentGame.isCheckmate()) {
+      gameWinner = currentGame.turn() === 'w' ? 'black' : 'white';
+    } else if (currentGame.isDraw()) {
+      gameWinner = 'draw';
+    }
+
+    setGameOver(true);
+    setWinner(gameWinner);
+  }, []);
+
   const makeBotMove = useCallback(() => {
     if (game.isGameOver()) {
-      determineGameOutcome();
+      determineGameOutcome(game);
       return;
     }
 
@@ -30,7 +42,7 @@ export const BotMode: React.FC = () => {
       const possibleMoves = gameCopy.moves({ verbose: true });
 
       if (possibleMoves.length === 0) {
-        determineGameOutcome();
+        determineGameOutcome(gameCopy);
         return;
       }
 
@@ -67,20 +79,11 @@ export const BotMode: React.FC = () => {
         setThinking(false);
 
         if (gameCopy.isGameOver()) {
-          determineGameOutcome();
+          determineGameOutcome(gameCopy);
         }
       }
     }
-  }, [game, difficulty]);
-
-  const determineGameOutcome = useCallback(() => {
-    setGameOver(true);
-    if (game.isCheckmate()) {
-      setWinner(game.turn() === 'w' ? 'black' : 'white');
-    } else if (game.isDraw()) {
-      setWinner('draw');
-    }
-  }, [game]);
+  }, [game, difficulty, determineGameOutcome]);
 
   const handlePlayerMove = useCallback(
     (move: { from: string; to: string }) => {
@@ -95,7 +98,7 @@ export const BotMode: React.FC = () => {
           setPosition(gameCopy.fen());
 
           if (gameCopy.isGameOver()) {
-            determineGameOutcome();
+            determineGameOutcome(gameCopy);
             return;
           }
 
@@ -126,7 +129,6 @@ export const BotMode: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-indigo-950 px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden">
-      {/* Background Chessboard Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="grid grid-cols-8 h-full">
           {[...Array(64)].map((_, i) => (
@@ -149,25 +151,30 @@ export const BotMode: React.FC = () => {
             <Chessboard position={position} onMove={handlePlayerMove} disabled={thinking || gameOver} />
             {gameOver && (
               <div className="mt-4 text-center">
-                <h3 className="text-xl font-bold text-blue-400">
-                  {winner === 'draw' ? 'Game is a Draw!' : `${winner?.toUpperCase()} Wins!`}
+                <h3 className="text-xl font-bold">
+                  {winner === 'draw'
+                    ? 'Game is a Draw!'
+                    : winner
+                    ? `${winner.charAt(0).toUpperCase() + winner.slice(1)} Wins!`
+                    : 'Game Over!'}
                 </h3>
               </div>
             )}
           </div>
           <div>
-            <GameStatus status={gameOver ? 'finished' : 'active'}
+            <GameStatus
+              status={gameOver ? 'finished' : 'active'}
               currentPlayer={game.turn() === 'w' ? 'white' : 'black'}
             />
             <div className="mt-4 bg-gradient-to-br from-gray-900/90 to-indigo-900/90 p-4 rounded-xl border border-white/10 shadow-lg">
               <h3 className="font-medium text-white mb-2">Bot Settings</h3>
               <select
                 value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value as Difficulty)}
+                onChange={e => setDifficulty(e.target.value as Difficulty)}
                 className="mt-1 block w-full rounded-md bg-gray-800 text-white shadow-sm"
                 disabled={gameOver}
               >
-                {Object.keys(BOT_DIFFICULTY_LEVELS).map((level) => (
+                {Object.keys(BOT_DIFFICULTY_LEVELS).map(level => (
                   <option key={level} value={level}>
                     {level.charAt(0) + level.slice(1).toLowerCase()}
                   </option>
