@@ -42,7 +42,7 @@ export const Chessboard: React.FC<ChessboardProps> = ({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div aria-hidden="true" className="w-full max-w-2xl mx-auto">         {/*Accessibility Improvement*/}
       <ReactChessboard
         position={position}
         onPieceDrop={onDrop}
