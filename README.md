@@ -13,6 +13,13 @@ Preview [link](https://web3-chess.netlify.app/)
       <sub>Project Creator and Lead blockchain, fullstack web Developer</sub>
     </td>
     <td align="center">
+      <a href="https://github.com/Chetan6969">
+        <img src="https://github.com/Chetan6969.png" width="100px;" alt="Chetan6969"/><br />
+        <sub><b>Chetan6969</b></sub>
+      </a><br />
+      <sub>Project collaborator and fullstack web Developer</sub>
+    </td>
+    <td align="center">
       <a href="https://github.com/yashvisharma1204">
         <img src="https://github.com/yashvisharma1204.png" width="100px;" alt="Yashvi Sharma"/><br />
         <sub><b>Yashvi Sharma</b></sub>
