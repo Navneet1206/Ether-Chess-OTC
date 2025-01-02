@@ -3,6 +3,8 @@ Welcome to the Web3 Based Chess Game! This is a decentralized chess platform whe
 Preview [link](https://web3-chess.netlify.app/)
 ---
 ## Contributors
+
+### Core Functional Contributors
 <table>
   <tr>
     <td align="center">
@@ -10,33 +12,51 @@ Preview [link](https://web3-chess.netlify.app/)
         <img src="https://github.com/Navneet1206.png" width="100px;" alt="Navneet1206"/><br />
         <sub><b>Navneet1206</b></sub>
       </a><br />
-      <sub>Project Creator and Lead blockchain, fullstack web Developer</sub>
+      <sub>Project Creator, Lead Blockchain & Full-Stack Developer</sub>
     </td>
     <td align="center">
       <a href="https://github.com/Chetan6969">
         <img src="https://github.com/Chetan6969.png" width="100px;" alt="Chetan6969"/><br />
         <sub><b>Chetan6969</b></sub>
       </a><br />
-      <sub>Project collaborator and fullstack web Developer</sub>
+      <sub>Project Collaborator & Full-Stack Developer</sub>
     </td>
     <td align="center">
       <a href="https://github.com/yashvisharma1204">
         <img src="https://github.com/yashvisharma1204.png" width="100px;" alt="Yashvi Sharma"/><br />
         <sub><b>Yashvi Sharma</b></sub>
       </a><br />
-      <sub>Website-UI-Contributions</sub>
+      <sub>UI Design & Website Contributions</sub>
     </td>
+  </tr>
+</table>
+
+---
+
+### Moderate Contributors
+<table>
+  <tr>
     <td align="center">
       <a href="https://github.com/yashpandav">
         <img src="https://github.com/yashpandav.png" width="100px;" alt="Yash Pandav"/><br />
         <sub><b>Yash Pandav</b></sub>
       </a><br />
-      <sub>Botmode-finishing-functionality-Contributions</sub>
+      <sub>Bot Mode Finishing Functionality</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Amansingh0807">
+        <img src="https://github.com/Amansingh0807.png" width="100px;" alt="Aman Singh"/><br />
+        <sub><b>Aman Singh</b></sub>
+      </a><br />
+      <sub>Free Mode Functionality Contributions</sub>
     </td>
   </tr>
 </table>
 
-Want to contribute? Check out our [CONTRIBUTING.md](https://github.com/Navneet1206/Ether-Chess-OTC/blob/main/CONTRIBUTING.md)!
+---
+
+### Want to Contribute?
+We welcome contributions from the community! Check out our [CONTRIBUTING.md](https://github.com/Navneet1206/Ether-Chess-OTC/blob/main/CONTRIBUTING.md) file to get started.
 ---
 ## Features
 1. **Home Screen**: A sleek interface to navigate and choose your game mode.
