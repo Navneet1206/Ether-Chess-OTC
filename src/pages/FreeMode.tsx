@@ -3,25 +3,35 @@ import { Chessboard } from '../components/Chessboard';
 import { GameStatus } from '../components/GameStatus';
 import { Chess } from 'chess.js';
 
+// Toast component for error feedback (example implementation)
+const Toast = ({ message }: { message: string }) => (
+  <div className="fixed bottom-4 right-4 bg-red-600 text-white py-2 px-4 rounded-md shadow-lg">
+    {message}
+  </div>
+);
+
 export const FreeMode: React.FC = () => {
-  const [game] = useState(new Chess());
+  const [game] = useState(() => new Chess());  // Optimized initialization
   const [position, setPosition] = useState(game.fen());
+  const [error, setError] = useState<string | null>(null);  // State for error feedback
 
   const handleMove = (move: { from: string; to: string }) => {
     try {
       game.move(move);
       setPosition(game.fen());
+      setError(null);  // Clear error on successful move
     } catch (error) {
       console.error('Invalid move:', error);
+      setError('Invalid move! Please try again.');  // User feedback
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-indigo-950 px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden">
       {/* Background Chessboard Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-5" aria-hidden="true">  {/* Accessibility improvement */}
         <div className="grid grid-cols-8 h-full">
-          {[...Array(64)].map((_, i) => (
+          {Array.from({ length: 64 }).map((_, i) => (  // Optimized background grid
             <div
               key={i}
               className={`aspect-square ${
@@ -52,6 +62,9 @@ export const FreeMode: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Render error message if move is invalid */}
+      {error && <Toast message={error} />}
     </div>
   );
 };
