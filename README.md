@@ -3,13 +3,8 @@
 Welcome to the **Web3 Based Chess Game**! This decentralized platform allows users to play chess online, connect their Ethereum wallets, and stake ETH in competitive matches. Experience the future of gaming with blockchain technology. 🕹️
 
 [🎮 **Live Preview**](https://web3-chess.netlify.app/)
-
 ---
-
-![Ether-Chess-OTC](https://socialify.git.ci/Navneet1206/Ether-Chess-OTC/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Dark)
-
 ---
-
 ## 👥 Contributors
 
 ### 🌟 Core Functional Contributors
@@ -70,6 +65,12 @@ Welcome to the **Web3 Based Chess Game**! This decentralized platform allows use
 We welcome contributions from the community! Check out our [📜 CONTRIBUTING.md](https://github.com/Navneet1206/Ether-Chess-OTC/blob/main/CONTRIBUTING.md) file to get started.
 
 ---
+---
+
+![Ether-Chess-OTC](https://socialify.git.ci/Navneet1206/Ether-Chess-OTC/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Dark)
+
+---
+
 
 ## 🚀 Features
 
