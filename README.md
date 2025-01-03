@@ -1,29 +1,63 @@
-# 🌟 Web3 Based Chess Game
+<h1 align="center" style="color: #1E90FF;">🎮 Welcome to Web3 Based Chess Game 🎮</h1>
+<h3 align="center" style="color: #4682B4;">A decentralized platform where blockchain meets chess!🕹️</h3>
 
-Welcome to the **Web3 Based Chess Game**! This decentralized platform allows users to play chess online, connect their Ethereum wallets, and stake ETH in competitive matches. Experience the future of gaming with blockchain technology. 🕹️
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=24&pause=1000&color=0000ff&center=true&vCenter=true&width=435&lines=Play+Chess+Online;Stake+ETH+and+Compete;Decentralized+Gaming+Platform;Powered+by+Ethereum;Join+the+Future+of+Gaming+%f0%9f%92%af" alt="Typing SVG" />
+</p>
 
-[🎮 **Live Preview**](https://web3-chess.netlify.app/)
+![Ether-Chess-OTC](https://socialify.git.ci/Navneet1206/Ether-Chess-OTC/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Dark)
 ---
+
+<h2 align="center" style="color: #1E90FF;">🔧 Tech Stack 🔧</h2>
+<p align="center">
+  <a href="https://reactjs.org/" target="_blank"> <img src="https://img.icons8.com/color/48/000000/react-native.png" alt="React" /> </a>
+  <a href="https://soliditylang.org/" target="_blank"> <img src="https://img.icons8.com/color/48/000000/solidity.png" alt="Solidity" /> </a>
+  <a href="https://ethereum.org/" target="_blank"> <img src="https://img.icons8.com/color/48/000000/ethereum.png" alt="Ethereum" /> </a>
+  <a href="https://nodejs.org/" target="_blank"> <img src="https://img.icons8.com/color/48/000000/nodejs.png" alt="Node.js" /> </a>
+  <a href="https://tailwindcss.com/" target="_blank"> <img src="https://img.shields.io/badge/-%2338B2AC.svg?logo=tailwind-css&logoColor=white&style=flat" alt="Tailwind CSS" /> </a>
+</p>
+
+<h3 align="center" style="color: #4682B4;">
+    <a href="https://web3-chess.netlify.app/" target="_blank">♟️ Live Preview ♟️</a>
+</h3>
+
 ---
-## 👥 Contributors
 
-### 🌟 Core Functional Contributors
+<h2 align="center" style="color: #1E90FF;">🚀 Features 🚀</h2>
 
-<table>
+- **🏠 Home Screen**: Sleek interface for easy navigation between game modes.
+- **🤖 Bot Mode**: Challenge a computer bot with various difficulty levels.
+- **🌐 Online Mode**: Connect with players worldwide and stake ETH in games.
+- **🔔 Game Alerts**: Real-time notifications for in-game actions.
+- **🔐 Wallet Integration**: Connect and manage your Ethereum wallet effortlessly.
+- **✅ Secure Transactions**: Ensure transparency and security with smart contracts.
+- **👤 User Profiles**: Track your performance with personalized profiles.
+  
+---
+
+<h2 align="center" style="color: #1E90FF;">👤 Contributors 👤</h2>
+
+<h3 align="center" style="color: #4682B4;">🌟 Core Functional Contributors 🌟</h3>
+<table align="center" style="background-color: #E6F7FF; border-radius: 10px; box-shadow: 0 4px 8px rgba(30, 144, 255, 0.2);">
   <tr>
-    <td align="center">
-      <a href="https://github.com/Navneet1206">
-        <img src="https://github.com/Navneet1206.png" width="100px;" alt="Navneet1206"/><br />
-        <sub><b>Navneet1206</b></sub>
-      </a><br />
-      <sub>🚀 Project Creator, Lead Blockchain & Full-Stack Developer</sub>
-    </td>
+    <td align="center"> ♖The Rook♖ </td>
+    <td align="center"> ♔The King♔ </td>
+    <td align="center"> ♖The Rook♖ </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="https://github.com/Chetan6969">
         <img src="https://github.com/Chetan6969.png" width="100px;" alt="Chetan6969"/><br />
         <sub><b>Chetan6969</b></sub>
       </a><br />
       <sub>💻 Project Collaborator & Full-Stack Developer</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Navneet1206">
+        <img src="https://github.com/Navneet1206.png" width="100px;" alt="Navneet1206"/><br />
+        <sub><b>Navneet1206</b></sub>
+      </a><br />
+      <sub>🚀 Project Creator, Lead Blockchain & Full-Stack Developer</sub>
     </td>
     <td align="center">
       <a href="https://github.com/yashvisharma1204">
@@ -35,11 +69,12 @@ Welcome to the **Web3 Based Chess Game**! This decentralized platform allows use
   </tr>
 </table>
 
----
-
-### 🛠️ Moderate Contributors
-
-<table>
+<h3 align="center" style="color: #1E90FF;">🛠️ Moderate Contributors 🛠️</h3>
+<table align="center" style="background-color: #E6F7FF; border-radius: 10px; box-shadow: 0 4px 8px rgba(30, 144, 255, 0.2);">
+  <tr>
+    <td align="center"> ♗The Bishop♗ </td>
+    <td align="center"> ♗The Bishop♗ </td>
+  </tr>
   <tr>
     <td align="center">
       <a href="https://github.com/yashpandav">
@@ -58,105 +93,57 @@ Welcome to the **Web3 Based Chess Game**! This decentralized platform allows use
   </tr>
 </table>
 
----
-
-### ✨ Want to Contribute?
-
-We welcome contributions from the community! Check out our [📜 CONTRIBUTING.md](https://github.com/Navneet1206/Ether-Chess-OTC/blob/main/CONTRIBUTING.md) file to get started.
-
----
----
-
-![Ether-Chess-OTC](https://socialify.git.ci/Navneet1206/Ether-Chess-OTC/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Dark)
-
----
-
-
-## 🚀 Features
-
-1. **🏠 Home Screen**: Navigate game modes effortlessly with a sleek interface.
-2. **🤖 Bot Mode**: Play against a computer bot with adjustable difficulty levels.
-3. **🌐 Online Mode**: Connect with players worldwide, stake ETH, and enjoy competitive chess.
-4. **🔔 Game Alerts**: Real-time notifications for game actions and updates.
-5. **🔐 Wallet Integration**: Seamlessly connect and manage your Ethereum wallet.
-6. **✅ Secure Transactions**: Smart contract-based staking ensures transparency and security.
-7. **👤 User Profiles**: Personalized player profiles with performance tracking.
+<h3 align="center" style="color: #1E90FF;">🛠️ Documentation Contributors 🛠️</h3>
+<table align="center" style="background-color: #E6F7FF; border-radius: 10px; box-shadow: 0 4px 8px rgba(30, 144, 255, 0.2);">
+  <tr>
+    <td align="center"> ♘The Knight♘ </td>
+  </tr>
+  <tr>
+    <td align="center">
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 🎨 Preview
+<h2 align="center" style="color: #1E90FF;">💡 How It Works 💡</h2>
 
-### 🖥️ Home Screen
-![Home Screen Preview](./MockDown%20images/Chess-home.png)
-
-### 🤖 Bot Mode
-![Bot Mode Preview](./MockDown%20images/Botmode.png)
-
-### 🎯 Game Created Alert
-![Game Created Alert Preview](./MockDown%20images/game%20created.png)
-
-### 🛠️ Local Installation
-![Local Installation Preview](./MockDown%20images/local_install.png)
-
-### 🏃‍♂️ Local Run
-![Local Run Preview](./MockDown%20images/local_run.png)
-
----
-
-## 🛠️ Tech Stack
-
-- **🌐 Frontend**: React.js
-- **⛓️ Blockchain**: Ethereum (Sepolia Testnet)
-- **📝 Smart Contracts**: Solidity
-- **🔗 Web3 Integration**: Web3.js
-- **🎨 Styling**: Tailwind CSS
-
----
-
-## 🧩 How It Works
-
-### 🌐 Online Mode
-
+#### 🌐 Online Mode:
 1. Connect your Ethereum wallet.
-2. Enter a stake amount (in ETH).
-3. Create or join a game with another player.
-4. Play chess and compete for winnings!
+2. Set a stake amount (in ETH).
+3. Create or join a game.
+4. Play chess and win ETH!
 
-### 🤖 Bot Mode
-
-1. Select difficulty level.
-2. Play chess against a computer bot.
-3. Practice and improve your chess skills.
+#### 🤖 Bot Mode:
+1. Choose your difficulty level.
+2. Play against the AI bot.
+3. Improve your chess skills.
 
 ---
 
-## ⚙️ Installation and Setup
+<h2 align="center" style="color: #1E90FF;">🎓 Installation & Setup 🎓</h2>
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/Navneet1206/online-chess-game.git
    ```
-
 2. Install dependencies:
    ```bash
    npm install
    ```
-
 3. Start the application:
    ```bash
    npm start
    ```
-
 4. Deploy Smart Contracts:
    ```bash
    truffle migrate --network sepolia
    ```
-
-5. Configure environment variables in `.env` file.
+5. Configure the environment variables in the `.env` file.
 
 ---
 
-## 🧪 Testing
+<h2 align="center">🔧 Testing 🔧</h2>
 
 1. Run the application locally:
    ```bash
@@ -176,16 +163,54 @@ We welcome contributions from the community! Check out our [📜 CONTRIBUTING.md
 
 ---
 
-## 📂 Issues and Contributions
+<h2 align="center">🖼 Preview 🖼</h2>
 
-Check the [📜 CONTRIBUTING.md](https://github.com/Navneet1206/Ether-Chess-OTC/blob/main/CONTRIBUTING.md) file for detailed information on known issues and how you can contribute.
+<table style="width: 100%; border-collapse: collapse; text-align: center; background-color: #E6F7FF; border-radius: 10px; box-shadow: 0 4px 8px rgba(30, 144, 255, 0.2);">
+  <tr>
+    <th style="padding: 10px; border: 1px solid #ddd;">🖥️Home Screen🖥️</th>
+    <th style="padding: 10px; border: 1px solid #ddd;">🤖Bot Mode🤖</th>
+  </tr>
+  <tr>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+      <img src="./MockDown%20images/Chess-home.png" alt="Web3 Chess Home Screen" style="width: 100%; max-width: 400px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
+      <p align="center" style="margin-top: 5px; font-style: italic;">Play Chess, Earn Crypto: Explore various modes</p>
+    </td>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+      <img src="./MockDown%20images/Botmode.png" alt="Web3 Chess Bot Mode" style="width: 100%; max-width: 400px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
+      <p align="center" style="margin-top: 5px; font-style: italic;">Challenge our AI bot and improve your skills</p>
+    </td>
+  </tr>
+</table>
+<table style="width: 100%; border-collapse: collapse; text-align: center; background-color: #E6F7FF; border-radius: 10px; box-shadow: 0 4px 8px rgba(30, 144, 255, 0.2);">
+  <tr>
+    <th style="padding: 10px; border: 1px solid #ddd;">🎯Game Created Alert🎯</th>
+    <th style="padding: 10px; border: 1px solid #ddd;">🛠️Local Installation and Run🛠️</th>
+  </tr>
+  <tr>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+      <img src="./MockDown%20images/game%20created.png" alt="Web3 Chess Game Created" style="width: 100%; max-width: 400px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
+      <p align="center" style="margin-top: 5px; font-style: italic;">Get alerted whenever the game is created</p>
+    </td>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+      <img src="./MockDown%20images/local_install.png" alt="Web3 Chess Local Installation" style="width: 700px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
+      <img src="./MockDown%20images/local_run.png" alt="Web3 Chess Local Run" style="width: 700px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
+      <p align="center" style="margin-top: 5px; font-style: italic;">This is how you can install and run the game</p>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 📧 Contact
-
-For queries or support, feel free to open an issue on GitHub or contact the project maintainer.
+<h2 align="center" style="color: #1E90FF;">📂 Issues and Contributions 📂</h2>
+<h3 align="center">Check the <a href="https://github.com/Navneet1206/Ether-Chess-OTC/blob/main/CONTRIBUTING.md" target="_blank"> 📜 CONTRIBUTING.md 📜 </a> file for detailed information on known issues and how you can contribute.</h3>
 
 ---
 
-### 🏆 Happy Chess Gaming!
+<h2 align="center" style="color: #1E90FF;">📧 Contact 📧</h2>
+<h3 align="center">For queries or support, feel free to open an issue on GitHub or contact the project maintainer.</h3>
+
+---
+
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=24&pause=1000&color=0000ff&center=true&vCenter=true&width=435&lines=Happy+Chess+Gaming!;Thank+You+For+Playing!;We+await+your+return;Have+a+good+day!" alt="Typing SVG" />
+</p>
