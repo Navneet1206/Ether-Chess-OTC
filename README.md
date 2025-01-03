@@ -100,6 +100,11 @@
   </tr>
   <tr>
     <td align="center">
+      <a href="https://github.com/GauravKarakoti">
+        <img src="https://github.com/GauravKarakoti.png" width="100px;" alt="GauravKaraKoti"/><br />
+        <sub><b>Gaurav KaraKoti</b></sub>
+      </a><br />
+      <sub>Documentation Contributions</sub>
     </td>
   </tr>
 </table>
