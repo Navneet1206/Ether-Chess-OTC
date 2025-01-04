@@ -5,8 +5,7 @@ Thank you for contributing to this project! To streamline the process to get poi
 ## **How to Submit Pull Request Information**
 
 ### Step 1: Visit the Portfolio
-- Go to my portfolio: [https://navneet-resume.netlify.app/](https://navneet-resume.netlify.app/)
-
+- Go to mail:-  rajvl132011@gmail.com
 ### Step 2: Fill Out the Contact Form
 Navigate to the **Contact** section on the portfolio and provide the following details in the form:
 
