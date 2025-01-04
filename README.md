@@ -132,19 +132,30 @@
    ```bash
    git clone https://github.com/Navneet1206/online-chess-game.git
    ```
-2. Install dependencies:
+2. Install dependencies in main folder:
    ```bash
    npm install
    ```
-3. Start the application:
+
+3. Start the Application :
+   ```bash
+   npm run dev
+   ```
+  
+4. Install dependencies in server folder :
+   ```bash
+   npm install
+   ```
+5. Start the server :
    ```bash
    npm start
    ```
-4. Deploy Smart Contracts:
+   
+6. Deploy Smart Contracts:
    ```bash
    truffle migrate --network sepolia
    ```
-5. Configure the environment variables in the `.env` file.
+7. Configure the environment variables in the `.env` file.
 
 ---
 
@@ -201,8 +212,16 @@
       <img src="./MockDown%20images/local_run.png" alt="Web3 Chess Local Run" style="width: 700px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
       <p align="center" style="margin-top: 5px; font-style: italic;">This is how you can install and run the game</p>
     </td>
+
+    
   </tr>
 </table>
+
+---
+<h2 align="center" style="color: #1E90FF;">⚠️ Important Note: ⚠️</h2>
+
+**Off Anti-Tracking** 
+For a seamless user experience, ensure that anti-tracking features are disabled in the browser settings, as this might cause issues with game state tracking and wallet interactions. You can disable these features in your browser preferences to avoid potential problems.
 
 ---
 
