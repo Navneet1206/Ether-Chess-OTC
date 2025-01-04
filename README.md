@@ -74,6 +74,7 @@
   <tr>
     <td align="center"> ♗The Bishop♗ </td>
     <td align="center"> ♗The Bishop♗ </td>
+    <td align="center"> ♗The Bishop♗ </td>
   </tr>
   <tr>
     <td align="center">
@@ -89,6 +90,13 @@
         <sub><b>Aman Singh</b></sub>
       </a><br />
       <sub>🧩 Free Mode Functionality Contributions</sub>
+    </td>
+     <td align="center">
+      <a href="https://github.com/GauravKarakoti">
+        <img src="https://github.com/GauravKarakoti.png" width="100px;" alt="GauravKaraKoti"/><br />
+        <sub><b>Gaurav KaraKoti</b></sub>
+      </a><br />
+      <sub>Documentation and functional Contributions</sub>
     </td>
   </tr>
 </table>
