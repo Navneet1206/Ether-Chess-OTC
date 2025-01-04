@@ -1,6 +1,6 @@
 # Project Contribution Guidelines
 
-Thank you for contributing to this project! To streamline the process and ensure smooth collaboration, please follow the guidelines below when submitting your pull requests.
+Thank you for contributing to this project! To streamline the process to get points in the SWOC and ensure smooth collaboration, please follow the guidelines below when submitting your pull requests.
 
 ## **How to Submit Pull Request Information**
 
