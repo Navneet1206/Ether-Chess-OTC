@@ -152,7 +152,7 @@
 
 1. Run the application locally:
    ```bash
-   npm start
+   npm run dev
    ```
 
 2. Test features:
