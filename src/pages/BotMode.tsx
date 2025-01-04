@@ -4,6 +4,7 @@ import { Chessboard } from '../components/Chessboard';
 import { GameStatus } from '../components/GameStatus';
 import { BOT_DIFFICULTY_LEVELS } from '../config/constants';
 import { Bot } from 'lucide-react';
+import { useGameStore } from '../store/useGameStore';
 
 type Difficulty = keyof typeof BOT_DIFFICULTY_LEVELS;
 
@@ -14,6 +15,8 @@ export const BotMode: React.FC = () => {
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState<'white' | 'black' | 'draw' | null>(null);
   const [thinking, setThinking] = useState(false);
+  const setCheckedKing = useGameStore((state) => state.setCheckedKing);
+    let checkedKing = useGameStore((state) => state.checkedKing); // Retrieve checkedKing from store
 
   const isInitialSetupRef = useRef(false);
 
@@ -110,7 +113,7 @@ export const BotMode: React.FC = () => {
     },
     [game, makeBotMove, gameOver, determineGameOutcome]
   );
-
+  
   useEffect(() => {
     if (!isInitialSetupRef.current) {
       isInitialSetupRef.current = true;
@@ -126,7 +129,12 @@ export const BotMode: React.FC = () => {
       return () => clearTimeout(moveTimer);
     }
   }, [game, makeBotMove, gameOver]);
-
+  // Determine if the king is in check
+  checkedKing = game.inCheck()
+  ? game.turn() === 'w' ? 'white' : 'black'
+  : null;
+  // Update the UI with the checked king (if any)
+  setCheckedKing(checkedKing);
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-indigo-950 px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden">
       <div className="absolute inset-0 opacity-5">
@@ -148,7 +156,7 @@ export const BotMode: React.FC = () => {
             <h2 className="text-2xl font-bold text-white flex items-center gap-4">
               Bot Mode <Bot className="text-blue-400" size={24} />
             </h2>
-            <Chessboard position={position} onMove={handlePlayerMove} disabled={thinking || gameOver} />
+            <Chessboard position={position} onMove={handlePlayerMove} disabled={thinking || gameOver} gameState={{checkedKing}}/>
             {gameOver && (
               <div className="mt-4 text-center">
                 <h3 className="text-xl font-bold">
@@ -163,7 +171,7 @@ export const BotMode: React.FC = () => {
           </div>
           <div>
             <GameStatus
-              status={gameOver ? 'finished' : 'active'}
+              status={gameOver ? 'completed' : 'active'}
               currentPlayer={game.turn() === 'w' ? 'white' : 'black'}
             />
             <div className="mt-4 bg-gradient-to-br from-gray-900/90 to-indigo-900/90 p-4 rounded-xl border border-white/10 shadow-lg">

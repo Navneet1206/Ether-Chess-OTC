@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Chessboard } from '../components/Chessboard';
 import { GameStatus } from '../components/GameStatus';
 import { Chess } from 'chess.js';
+import { useGameStore } from '../store/useGameStore';
 
 // Toast component for error feedback (example implementation)
 const Toast = ({ message }: { message: string }) => (
@@ -14,12 +15,21 @@ export const FreeMode: React.FC = () => {
   const [game] = useState(() => new Chess());  // Optimized initialization
   const [position, setPosition] = useState(game.fen());
   const [error, setError] = useState<string | null>(null);  // State for error feedback
+  const setCheckedKing = useGameStore((state) => state.setCheckedKing);
+  let checkedKing = useGameStore((state) => state.checkedKing); // Retrieve checkedKing from store
 
   const handleMove = (move: { from: string; to: string }) => {
     try {
-      game.move(move);
+      const moveResult = game.move(move);
+      if (!moveResult) throw new Error('Invalid move');
       setPosition(game.fen());
       setError(null);  // Clear error on successful move
+      // Determine if the king is in check
+      checkedKing = game.inCheck()
+      ? game.turn() === 'w' ? 'white' : 'black'
+      : null;
+      // Update the UI with the checked king (if any)
+      setCheckedKing(checkedKing);
     } catch (error) {
       console.error('Invalid move:', error);
       setError('Invalid move! Please try again.');  // User feedback
@@ -46,7 +56,7 @@ export const FreeMode: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 bg-gradient-to-br from-gray-900/90 to-indigo-900/90 p-8 rounded-xl border border-white/10 shadow-xl relative">
             <h2 className="text-2xl font-bold text-white">Free Mode</h2>
-            <Chessboard position={position} onMove={handleMove} />
+            <Chessboard position={position} onMove={handleMove} gameState={{checkedKing}}/>
           </div>
           <div>
             <GameStatus
