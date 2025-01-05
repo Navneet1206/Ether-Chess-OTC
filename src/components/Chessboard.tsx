@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Chessboard as ReactChessboard } from 'react-chessboard';
 import { Chess } from 'chess.js';
 
@@ -10,14 +10,52 @@ interface ChessboardProps {
   gameState: { checkedKing: 'white' | 'black' | null };
 }
 
-export const Chessboard: React.FC<ChessboardProps> = ({
+export function Chessboard({
   position = 'start',
   onMove,
   orientation = 'white',
   disabled = false,
   gameState,
-}) => {
-  const chess = new Chess(position);
+}: ChessboardProps) {
+  const [chess] = useState(() => new Chess(position));
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+  
+  // Keep track of the current position
+  const currentPositionRef = useRef(position);
+  if (position !== currentPositionRef.current) {
+    chess.load(position);
+    currentPositionRef.current = position;
+  }
+
+  const onSquareClick = (square: string) => {
+    if (disabled) return;
+
+    const piece = chess.get(square);
+    
+    // If clicking on a new piece of the player's color
+    if (piece && piece.color === chess.turn()) {
+      setSelectedSquare(square);
+      return;
+    }
+
+    // If a piece is selected and clicking on a different square
+    if (selectedSquare) {
+      try {
+        const moveAttempt = chess.move({
+          from: selectedSquare,
+          to: square,
+          promotion: 'q',
+        });
+
+        if (moveAttempt !== null && onMove) {
+          onMove({ from: selectedSquare, to: square });
+        }
+      } catch (error) {
+        // Invalid move - do nothing
+      }
+      setSelectedSquare(null);
+    }
+  };
 
   const onDrop = (sourceSquare: string, targetSquare: string) => {
     if (disabled) return false;
@@ -42,24 +80,41 @@ export const Chessboard: React.FC<ChessboardProps> = ({
   };
 
   const getCustomSquareStyles = () => {
-    if (!gameState.checkedKing) return {};
-  
-    const kingSquare = chess.board().flat().find(
-      (piece) =>
-        piece &&
-        piece.type === 'k' &&
-        ((gameState.checkedKing === 'white' && piece.color === 'w') ||
-          (gameState.checkedKing === 'black' && piece.color === 'b'))
-    )?.square;
-  
-    return kingSquare
-      ? {
-          [kingSquare]: {
-            backgroundColor: 'rgba(255, 0, 0, 0.4)',
-            border: '2px solid red',
-          },
-        }
-      : {};
+    const styles: Record<string, React.CSSProperties> = {};
+    
+    // Add highlighting for selected square
+    if (selectedSquare) {
+      styles[selectedSquare] = {
+        backgroundColor: 'rgba(255, 255, 0, 0.4)',
+      };
+    }
+    
+    // Add highlighting for checked king
+    if (gameState.checkedKing) {
+      const kingSquare = chess.board().flat().find(
+        (piece) =>
+          piece &&
+          piece.type === 'k' &&
+          ((gameState.checkedKing === 'white' && piece.color === 'w') ||
+            (gameState.checkedKing === 'black' && piece.color === 'b'))
+      )?.square;
+
+      if (kingSquare) {
+        styles[kingSquare] = {
+          backgroundColor: 'rgba(255, 0, 0, 0.4)',
+          border: '2px solid red',
+        };
+      }
+
+      if(selectedSquare === kingSquare) {
+        styles[selectedSquare] = {
+          backgroundColor: 'rgba(255, 255, 0, 0.4)',
+        };
+      }
+      
+    }
+
+    return styles;
   };
 
   return (
@@ -67,6 +122,7 @@ export const Chessboard: React.FC<ChessboardProps> = ({
       <ReactChessboard
         position={position}
         onPieceDrop={onDrop}
+        onSquareClick={onSquareClick}
         boardOrientation={orientation}
         customBoardStyle={{
           borderRadius: '4px',
@@ -76,4 +132,4 @@ export const Chessboard: React.FC<ChessboardProps> = ({
       />
     </div>
   );
-};
+}
