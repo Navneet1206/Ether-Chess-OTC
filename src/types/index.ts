@@ -6,14 +6,15 @@ export interface Player {
 }
 
 export interface GameState {
-  gameId: string;
-  players: {
-    white: Player;
+  gameId?: string | null;
+  players?: {
+    white: Player | null;
     black: Player | null;
   };
-  stake: string;
-  status: 'waiting' | 'active' | 'completed';
+  stake?: string | number;
+  status?: 'waiting' | 'active' | 'completed';
   winner?: string | null;
-  moves: string[];
-  position: string;
+  moves?: string[];
+  position?: string;
+  checkedKing?: 'white' | 'black' | null;   //Check if the king is in checked
 }

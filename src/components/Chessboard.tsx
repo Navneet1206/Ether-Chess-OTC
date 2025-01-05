@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { Chessboard as ReactChessboard } from 'react-chessboard';
 import { Chess } from 'chess.js';
-import { useGameStore } from '../store/useGameStore';
 
 interface ChessboardProps {
   position?: string;
   onMove?: (move: { from: string; to: string }) => void;
   orientation?: 'white' | 'black';
   disabled?: boolean;
+  gameState: { checkedKing: 'white' | 'black' | null };
 }
 
 export function Chessboard({
@@ -15,6 +15,7 @@ export function Chessboard({
   onMove,
   orientation = 'white',
   disabled = false,
+<<<<<<< HEAD
 }: ChessboardProps) {
   const [chess] = useState(() => new Chess(position));
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
@@ -56,6 +57,11 @@ export function Chessboard({
       setSelectedSquare(null);
     }
   };
+=======
+  gameState,
+}) => {
+  const chess = new Chess(position);
+>>>>>>> origin/main
 
   const onDrop = (sourceSquare: string, targetSquare: string) => {
     if (disabled) return false;
@@ -79,6 +85,27 @@ export function Chessboard({
     }
   };
 
+  const getCustomSquareStyles = () => {
+    if (!gameState.checkedKing) return {};
+  
+    const kingSquare = chess.board().flat().find(
+      (piece) =>
+        piece &&
+        piece.type === 'k' &&
+        ((gameState.checkedKing === 'white' && piece.color === 'w') ||
+          (gameState.checkedKing === 'black' && piece.color === 'b'))
+    )?.square;
+  
+    return kingSquare
+      ? {
+          [kingSquare]: {
+            backgroundColor: 'rgba(255, 0, 0, 0.4)',
+            border: '2px solid red',
+          },
+        }
+      : {};
+  };
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       <ReactChessboard
@@ -90,6 +117,7 @@ export function Chessboard({
           borderRadius: '4px',
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
         }}
+<<<<<<< HEAD
         customSquareStyles={{
           ...(selectedSquare && {
             [selectedSquare]: {
@@ -97,6 +125,9 @@ export function Chessboard({
             },
           }),
         }}
+=======
+        customSquareStyles={getCustomSquareStyles()}
+>>>>>>> origin/main
       />
     </div>
   );
