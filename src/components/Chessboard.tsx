@@ -15,11 +15,10 @@ export function Chessboard({
   onMove,
   orientation = 'white',
   disabled = false,
-<<<<<<< HEAD
+  gameState,
 }: ChessboardProps) {
   const [chess] = useState(() => new Chess(position));
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
-  const { gameState } = useGameStore();
   
   // Keep track of the current position
   const currentPositionRef = useRef(position);
@@ -39,7 +38,7 @@ export function Chessboard({
       return;
     }
 
-    // If a piece is selected and clicking on a different square (either empty or opponent's piece)
+    // If a piece is selected and clicking on a different square
     if (selectedSquare) {
       try {
         const moveAttempt = chess.move({
@@ -57,11 +56,6 @@ export function Chessboard({
       setSelectedSquare(null);
     }
   };
-=======
-  gameState,
-}) => {
-  const chess = new Chess(position);
->>>>>>> origin/main
 
   const onDrop = (sourceSquare: string, targetSquare: string) => {
     if (disabled) return false;
@@ -86,24 +80,41 @@ export function Chessboard({
   };
 
   const getCustomSquareStyles = () => {
-    if (!gameState.checkedKing) return {};
-  
-    const kingSquare = chess.board().flat().find(
-      (piece) =>
-        piece &&
-        piece.type === 'k' &&
-        ((gameState.checkedKing === 'white' && piece.color === 'w') ||
-          (gameState.checkedKing === 'black' && piece.color === 'b'))
-    )?.square;
-  
-    return kingSquare
-      ? {
-          [kingSquare]: {
-            backgroundColor: 'rgba(255, 0, 0, 0.4)',
-            border: '2px solid red',
-          },
-        }
-      : {};
+    const styles: Record<string, React.CSSProperties> = {};
+    
+    // Add highlighting for selected square
+    if (selectedSquare) {
+      styles[selectedSquare] = {
+        backgroundColor: 'rgba(255, 255, 0, 0.4)',
+      };
+    }
+    
+    // Add highlighting for checked king
+    if (gameState.checkedKing) {
+      const kingSquare = chess.board().flat().find(
+        (piece) =>
+          piece &&
+          piece.type === 'k' &&
+          ((gameState.checkedKing === 'white' && piece.color === 'w') ||
+            (gameState.checkedKing === 'black' && piece.color === 'b'))
+      )?.square;
+
+      if (kingSquare) {
+        styles[kingSquare] = {
+          backgroundColor: 'rgba(255, 0, 0, 0.4)',
+          border: '2px solid red',
+        };
+      }
+
+      if(selectedSquare === kingSquare) {
+        styles[selectedSquare] = {
+          backgroundColor: 'rgba(255, 255, 0, 0.4)',
+        };
+      }
+      
+    }
+
+    return styles;
   };
 
   return (
@@ -117,17 +128,7 @@ export function Chessboard({
           borderRadius: '4px',
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
         }}
-<<<<<<< HEAD
-        customSquareStyles={{
-          ...(selectedSquare && {
-            [selectedSquare]: {
-              backgroundColor: 'rgba(255, 255, 0, 0.4)',
-            },
-          }),
-        }}
-=======
         customSquareStyles={getCustomSquareStyles()}
->>>>>>> origin/main
       />
     </div>
   );
