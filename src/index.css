@@ -1,3 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+.highlight-check {
+    background-color: rgba(255, 0, 0, 0.5); /* Red translucent background */
+}

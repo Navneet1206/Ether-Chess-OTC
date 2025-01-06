@@ -78,6 +78,8 @@ export const OnlineMode = () => {
   const [isCreatingGame, setIsCreatingGame] = useState(false);
   const [isJoiningGame, setIsJoiningGame] = useState(false);
   const [isVerifyingGame, setIsVerifyingGame] = useState(false);
+  const setCheckedKing = useGameStore((state) => state.setCheckedKing);
+  let checkedKing = useGameStore((state) => state.checkedKing); // Retrieve checkedKing from store
 
   const MIN_STAKE = 0.0001;
   const MAX_STAKE = 0.1;
@@ -246,6 +248,13 @@ export const OnlineMode = () => {
     }
   };
 
+  // Determine if the king is in check
+  checkedKing = game.inCheck()
+  ? game.turn() === 'w' ? 'white' : 'black'
+  : null;
+  // Update the UI with the checked king (if any)
+  setCheckedKing(checkedKing);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-950 via-gray-900 to-indigo-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="bg-gradient-to-br from-gray-900/80 to-indigo-900/80 p-10 rounded-xl border border-white/10 shadow-xl max-w-4xl w-full">
@@ -333,6 +342,7 @@ export const OnlineMode = () => {
                 position={gameState?.position || 'start'} 
                 onMove={handleMove}
                 orientation={gameState?.players?.white?.address === address ? 'white' : 'black'}
+                gameState={{checkedKing}}
               />
             </div>
           </div>

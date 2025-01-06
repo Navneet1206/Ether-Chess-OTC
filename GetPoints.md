@@ -1,14 +1,13 @@
-# Project Contribution Guidelines
 
-Thank you for contributing to this project! To streamline the process to get points in the SWOC and ensure smooth collaboration, please follow the guidelines below when submitting your pull requests.
+# Thank you for contributing to this project! To streamline the process and ensure smooth collaboration, please follow the guidelines below when submitting your pull requests.
 
 ## **How to Submit Pull Request Information**
 
 ### Step 1: Visit the Portfolio
-- Go to my portfolio: [https://navneet-resume.netlify.app/](https://navneet-resume.netlify.app/)
+- Go to  Portfolio :- https://navneet-resume.netlify.app/
 
 ### Step 2: Fill Out the Contact Form
-Navigate to the **Contact** section on the portfolio and provide the following details in the form:
+  provide the following details in the form:
 
 1. **Name:**  
    - Format: Your Full Name (GitHub Username)  
