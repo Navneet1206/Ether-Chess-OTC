@@ -27,7 +27,7 @@ class SocketService {
 
   private createSocketConnection(address: string, username: string) {
     try {
-      this.socket = io('http://localhost:3001', {
+      this.socket = io('http://localhost:8080', {
         query: { 
           address: address.toLowerCase(), 
           username: username.trim()
@@ -89,14 +89,15 @@ class SocketService {
       }
     });
 
-    //Check if the king is in checked
+    // Check if the king is in check
     this.socket.on('kingInCheck', ({ kingColor }) => {
       console.log('King in check:', kingColor);
-      useGameStore.getState().setGameState({ checkedKing: kingColor });
+      useGameStore.getState().setCheckedKing(kingColor);
     });
 
     this.socket.on('gameOver', ({ winner }) => {
       console.log('Game over, winner:', winner);
+      useGameStore.getState().setGameState({ status: 'finished', winner });
     });
   }
 

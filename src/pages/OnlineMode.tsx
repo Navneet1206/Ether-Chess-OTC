@@ -5,15 +5,9 @@ import { Chessboard } from '../components/Chessboard';
 import { ethers } from 'ethers';
 import { useGameStore } from '../store/useGameStore';
 import { AlertCircle, Check, Loader2, ArrowUp, ArrowDown } from 'lucide-react';
+import { Chess } from 'chess.js';
 
-const Button = ({ 
-  children, 
-  onClick, 
-  disabled, 
-  variant = 'primary', 
-  className = '',
-  loading = false 
-}) => {
+const Button = ({ children, onClick, disabled, variant = 'primary', className = '', loading = false }) => {
   const baseStyles = "px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2";
   const variants = {
     primary: "bg-indigo-600 hover:bg-indigo-500 text-white disabled:hover:bg-indigo-600",
@@ -22,11 +16,7 @@ const Button = ({
   };
 
   return (
-    <button 
-      onClick={onClick} 
-      disabled={disabled || loading} 
-      className={`${baseStyles} ${variants[variant]} ${className}`}
-    >
+    <button onClick={onClick} disabled={disabled || loading} className={`${baseStyles} ${variants[variant]} ${className}`}>
       {loading && <Loader2 className="w-4 h-4 animate-spin" />}
       {children}
     </button>
@@ -36,10 +26,7 @@ const Button = ({
 const Input = ({ label, ...props }) => (
   <div className="space-y-2">
     {label && <label className="block text-sm font-medium text-white">{label}</label>}
-    <input
-      {...props}
-      className="w-full px-4 py-3 bg-gray-800 text-white border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    />
+    <input {...props} className="w-full px-4 py-3 bg-gray-800 text-white border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
   </div>
 );
 
@@ -78,8 +65,7 @@ export const OnlineMode = () => {
   const [isCreatingGame, setIsCreatingGame] = useState(false);
   const [isJoiningGame, setIsJoiningGame] = useState(false);
   const [isVerifyingGame, setIsVerifyingGame] = useState(false);
-  const setCheckedKing = useGameStore((state) => state.setCheckedKing);
-  let checkedKing = useGameStore((state) => state.checkedKing); // Retrieve checkedKing from store
+  const [game] = useState(new Chess());
 
   const MIN_STAKE = 0.0001;
   const MAX_STAKE = 0.1;
@@ -94,11 +80,12 @@ export const OnlineMode = () => {
   useEffect(() => {
     socketService.onGameState((state) => {
       setGameState(state);
+      game.load(state.position);
     });
     return () => {
       socketService.disconnect();
     };
-  }, [setGameState]);
+  }, [setGameState, game]);
 
   const handleStakeChange = (increment) => {
     setStake(prevStake => {
@@ -167,11 +154,7 @@ export const OnlineMode = () => {
       const contract = new ethers.Contract(contractAddress, chessGameABI, signer);
       const generatedGameId = Math.random().toString(36).substring(7);
 
-      const tx = await contract.createGame(generatedGameId, {
-        value: stakeInWei,
-        gasLimit: (await contract.createGame.estimateGas(generatedGameId, { value: stakeInWei })) * 12n / 10n
-      });
-
+      const tx = await contract.createGame(generatedGameId, { value: stakeInWei });
       showToast('Transaction submitted. Waiting for confirmation...');
       await tx.wait();
 
@@ -187,7 +170,7 @@ export const OnlineMode = () => {
       showToast(`Game created successfully! Game ID: ${generatedGameId}`);
     } catch (error) {
       console.error('Error creating game:', error);
-      setError(error.message || 'Failed to create game');
+      setError(error.reason || error.message || 'Failed to create game');
     } finally {
       setIsCreatingGame(false);
     }
@@ -220,11 +203,7 @@ export const OnlineMode = () => {
       }
 
       const contractWithSigner = new ethers.Contract(contractAddress, chessGameABI, signer);
-      const tx = await contractWithSigner.joinGame(joinGameId, {
-        value: gameDetails.stake,
-        gasLimit: (await contractWithSigner.joinGame.estimateGas(joinGameId, { value: gameDetails.stake })) * 12n / 10n
-      });
-
+      const tx = await contractWithSigner.joinGame(joinGameId, { value: gameDetails.stake });
       showToast('Transaction submitted. Waiting for confirmation...');
       await tx.wait();
 
@@ -236,7 +215,7 @@ export const OnlineMode = () => {
       showToast('Successfully joined the game!');
     } catch (error) {
       console.error('Error joining game:', error);
-      setError(error.message || 'Failed to join game');
+      setError(error.reason || error.message || 'Failed to join game');
     } finally {
       setIsJoiningGame(false);
     }
@@ -247,13 +226,6 @@ export const OnlineMode = () => {
       socketService.makeMove(gameId, move);
     }
   };
-
-  // Determine if the king is in check
-  checkedKing = game.inCheck()
-  ? game.turn() === 'w' ? 'white' : 'black'
-  : null;
-  // Update the UI with the checked king (if any)
-  setCheckedKing(checkedKing);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-950 via-gray-900 to-indigo-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -279,32 +251,14 @@ export const OnlineMode = () => {
             <div>
               <label className="block text-white font-medium mb-3">Select Stake (ETH)</label>
               <div className="flex items-center gap-4">
-                <button
-                  onClick={() => handleStakeChange(-STAKE_INCREMENT)}
-                  className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
-                  disabled={stake <= MIN_STAKE}
-                >
+                <button onClick={() => handleStakeChange(-STAKE_INCREMENT)} className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50" disabled={stake <= MIN_STAKE}>
                   <ArrowDown size={18} />
                 </button>
                 <div className="relative flex-1">
-                  <input
-                    type="number"
-                    value={stake}
-                    onChange={handleStakeInput}
-                    step={STAKE_INCREMENT}
-                    min={MIN_STAKE}
-                    max={MAX_STAKE}
-                    className="w-full bg-gray-800 text-white text-center py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-                  />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    ETH
-                  </span>
+                  <input type="number" value={stake} onChange={handleStakeInput} step={STAKE_INCREMENT} min={MIN_STAKE} max={MAX_STAKE} className="w-full bg-gray-800 text-white text-center py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" />
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">ETH</span>
                 </div>
-                <button
-                  onClick={() => handleStakeChange(STAKE_INCREMENT)}
-                  className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
-                  disabled={stake >= MAX_STAKE}
-                >
+                <button onClick={() => handleStakeChange(STAKE_INCREMENT)} className="p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50" disabled={stake >= MAX_STAKE}>
                   <ArrowUp size={18} />
                 </button>
               </div>
@@ -312,20 +266,10 @@ export const OnlineMode = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                onClick={handleCreateGame}
-                disabled={!address || isCreatingGame || stake < MIN_STAKE || stake > MAX_STAKE}
-                loading={isCreatingGame}
-                className="flex-1 py-4 text-lg"
-              >
+              <Button onClick={handleCreateGame} disabled={!address || isCreatingGame || stake < MIN_STAKE || stake > MAX_STAKE} loading={isCreatingGame} className="flex-1 py-4 text-lg">
                 {isCreatingGame ? 'Creating Game...' : 'Create Game'}
               </Button>
-              <Button
-                onClick={() => setIsJoinGameDialogOpen(true)}
-                disabled={!address}
-                variant="secondary"
-                className="flex-1 py-4 text-lg"
-              >
+              <Button onClick={() => setIsJoinGameDialogOpen(true)} disabled={!address} variant="secondary" className="flex-1 py-4 text-lg">
                 Join Game
               </Button>
             </div>
@@ -338,40 +282,17 @@ export const OnlineMode = () => {
               </p>
             </div>
             <div className="aspect-square w-full max-w-2xl mx-auto">
-              <Chessboard 
-                position={gameState?.position || 'start'} 
-                onMove={handleMove}
-                orientation={gameState?.players?.white?.address === address ? 'white' : 'black'}
-                gameState={{checkedKing}}
-              />
+              <Chessboard position={gameState?.position || 'start'} onMove={handleMove} orientation={gameState?.players?.white?.address === address ? 'white' : 'black'} />
             </div>
           </div>
         )}
 
-        <Dialog
-          open={isJoinGameDialogOpen}
-          onClose={() => setIsJoinGameDialogOpen(false)}
-          title="Join Game"
-          description="Enter the Game ID to join an existing game"
-        >
+        <Dialog open={isJoinGameDialogOpen} onClose={() => setIsJoinGameDialogOpen(false)} title="Join Game" description="Enter the Game ID to join an existing game">
           <div className="space-y-4">
-            <Input
-              placeholder="Enter Game ID"
-              value={joinGameId}
-              onChange={(e) => setJoinGameId(e.target.value)}
-            />
+            <Input placeholder="Enter Game ID" value={joinGameId} onChange={(e) => setJoinGameId(e.target.value)} />
             <div className="flex justify-end gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setIsJoinGameDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleJoinGame}
-                disabled={!joinGameId.trim() || isJoiningGame}
-                loading={isJoiningGame}
-              >
+              <Button variant="outline" onClick={() => setIsJoinGameDialogOpen(false)}>Cancel</Button>
+              <Button onClick={handleJoinGame} disabled={!joinGameId.trim() || isJoiningGame} loading={isJoiningGame}>
                 {isJoiningGame ? 'Joining...' : 'Join Game'}
               </Button>
             </div>

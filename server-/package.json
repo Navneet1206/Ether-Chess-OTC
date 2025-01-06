@@ -5,17 +5,21 @@
   "scripts": {
     "start": "nodemon index.js"
   },
-  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@jackstenglein/chess": "^2.2.8",
+    "body-parser": "^1.20.3",
     "chess.js": "^1.0.0-beta.8",
+    "chessground": "^9.1.1",
     "cors": "^2.8.5",
-    "express": "^4.21.1",
+    "ethers": "^6.13.5",
+    "express": "^4.21.2",
     "http": "^0.0.1-security",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"

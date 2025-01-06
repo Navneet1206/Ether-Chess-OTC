@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@jackstenglein/chess": "^2.2.8",
     "@openzeppelin/contracts": "^5.0.1",
     "chess.js": "^1.0.0-beta.7",
+    "chessground": "^9.1.1",
     "ethers": "^6.11.1",
     "express": "^4.18.3",
     "hardhat": "^2.22.17",
