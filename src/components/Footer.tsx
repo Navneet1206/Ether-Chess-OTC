@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const Footer: React.FC = () => {
   return (
@@ -33,19 +34,19 @@ export const Footer: React.FC = () => {
             <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">Play</h4>
             <ul className="space-y-2">
               <li>
-                <button onClick={() => console.log('Navigate to practice')} className="text-blue-200/70 hover:text-blue-400 text-sm transition-colors">
+                <Link to='play/free' onClick={() => console.log('Navigate to practice')} className="text-blue-200/70 hover:text-blue-400 text-sm transition-colors">
                   Practice Mode
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => console.log('Navigate to tournaments')} className="text-blue-200/70 hover:text-blue-400 text-sm transition-colors">
+                <Link to='play/online' onClick={() => console.log('Navigate to tournaments')} className="text-blue-200/70 hover:text-blue-400 text-sm transition-colors">
                   Tournaments
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => console.log('Navigate to AI')} className="text-blue-200/70 hover:text-blue-400 text-sm transition-colors">
+                <Link to='play/bot' onClick={() => console.log('Navigate to AI')} className="text-blue-200/70 hover:text-blue-400 text-sm transition-colors">
                   AI Challenge
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
