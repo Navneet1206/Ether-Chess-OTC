@@ -27,6 +27,12 @@ export function Chessboard({
     currentPositionRef.current = position;
   }
 
+  // Get all legal moves for the selected piece
+  const getLegalMovesForSquare = (square: string) => {
+    const moves = chess.moves({ square, verbose: true });
+    return moves.map(move => move.to);
+  };
+
   const onSquareClick = (square: string) => {
     if (disabled) return;
 
@@ -87,6 +93,28 @@ export function Chessboard({
       styles[selectedSquare] = {
         backgroundColor: 'rgba(255, 255, 0, 0.4)',
       };
+
+      // Add highlighting for legal moves
+      const legalMoves = getLegalMovesForSquare(selectedSquare);
+      legalMoves.forEach(square => {
+        styles[square] = {
+          backgroundColor: 'rgba(0, 255, 0, 0.2)',
+          borderRadius: '50%',
+          // Add a dot in the center for empty squares
+          '::before': {
+            content: '""',
+            display: 'block',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '20%',
+            height: '20%',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(0, 255, 0, 0.5)',
+          }
+        };
+      });
     }
     
     // Add highlighting for checked king
@@ -111,7 +139,6 @@ export function Chessboard({
           backgroundColor: 'rgba(255, 255, 0, 0.4)',
         };
       }
-      
     }
 
     return styles;
