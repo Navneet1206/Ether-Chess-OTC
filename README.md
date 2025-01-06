@@ -75,6 +75,7 @@
     <td align="center"> ♗The Bishop♗ </td>
     <td align="center"> ♗The Bishop♗ </td>
     <td align="center"> ♗The Bishop♗ </td>
+    <td align="center"> ♗The Bishop♗ </td>
   </tr>
   <tr>
     <td align="center">
@@ -97,6 +98,13 @@
         <sub><b>Gaurav KaraKoti</b></sub>
       </a><br />
       <sub>Documentation and functional Contributions</sub>
+    </td>
+     <td align="center">
+      <a href="https://github.com/Roshansuthar1105">
+        <img src="https://github.com/Roshansuthar1105.png" width="100px;" alt="Roshansuthar"/><br />
+        <sub><b>Roshan Suthar</b></sub>
+      </a><br />
+      <sub>functional Contributions</sub>
     </td>
   </tr>
 </table>
