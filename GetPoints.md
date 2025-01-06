@@ -4,10 +4,10 @@
 ## **How to Submit Pull Request Information**
 
 ### Step 1: Visit the Portfolio
-- Go to  mail :- 
-https://nav-eth-project.netlify.app/
+- Go to  Portfolio :- https://navneet-resume.netlify.app/
 
-### Step 2: Fill Out the Contact Form  provide the following details in the form:
+### Step 2: Fill Out the Contact Form
+  provide the following details in the form:
 
 1. **Name:**  
    - Format: Your Full Name (GitHub Username)  
