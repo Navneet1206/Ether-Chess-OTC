@@ -34,7 +34,7 @@ export const BotMode: React.FC = () => {
   const [promotionSquare, setPromotionSquare] = useState<string | null>(null);
   const [checkedKing, setCheckedKing] = useState<'white' | 'black' | null>(null);
   const [showWinnerPopup, setShowWinnerPopup] = useState(false);
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [timeLeft, setTimeLeft] = useState<number>(20);
 
   // Evaluate board position for bot
   const evaluatePosition = (chess: Chess): number => {
@@ -118,12 +118,34 @@ export const BotMode: React.FC = () => {
 
     setThinking(true);
     const gameCopy = new Chess(game.fen());
+
+    // Check for immediate winning moves (checkmate)
+    const moves = gameCopy.moves({ verbose: true });
+    for (const move of moves) {
+      gameCopy.move(move);
+      if (gameCopy.isCheckmate()) {
+        setGame(gameCopy);
+        setPosition(gameCopy.fen());
+        updateCheckedKing(gameCopy);
+        setThinking(false);
+        determineGameOutcome();
+        return;
+      }
+      gameCopy.undo();
+    }
+
     let moveToMake;
 
     switch (difficulty) {
       case 'EASY':
-        const moves = gameCopy.moves({ verbose: true });
-        moveToMake = moves[Math.floor(Math.random() * moves.length)];
+        // Random move, but avoid losing moves
+        const safeMoves = moves.filter(move => {
+          gameCopy.move(move);
+          const isSafe = !gameCopy.isCheckmate() && !gameCopy.isDraw();
+          gameCopy.undo();
+          return isSafe;
+        });
+        moveToMake = safeMoves[Math.floor(Math.random() * safeMoves.length)];
         break;
 
       case 'MEDIUM':
@@ -167,7 +189,7 @@ export const BotMode: React.FC = () => {
     setGameOver(true);
     setWinner(gameWinner);
     setShowWinnerPopup(true);
-    setTimeLeft(5);
+    setTimeLeft(20);
   };
 
   useEffect(() => {
@@ -179,6 +201,7 @@ export const BotMode: React.FC = () => {
       }, 1000);
     } else if (timeLeft === 0) {
       setShowWinnerPopup(false);
+      restartGame();
     }
 
     return () => {
@@ -187,6 +210,18 @@ export const BotMode: React.FC = () => {
       }
     };
   }, [showWinnerPopup, timeLeft]);
+
+  const restartGame = () => {
+    const newGame = new Chess();
+    setGame(newGame);
+    setPosition(newGame.fen());
+    setGameOver(false);
+    setWinner(null);
+    setCheckedKing(null);
+    setSelectedSquare(null);
+    setPromotionSquare(null);
+    setThinking(false);
+  };
 
   const getLegalMovesForSquare = (square: string) => {
     return game.moves({ square, verbose: true }).map(move => move.to);
@@ -308,9 +343,15 @@ export const BotMode: React.FC = () => {
         <h2 className="text-3xl font-bold mb-2">
           {winner === 'draw'
             ? 'Game is a Draw!'
-            : `${winner?.charAt(0).toUpperCase()}${winner?.slice(1)} Wins!`}
+            : `${winner === 'white' ? 'White' : 'Black'} Wins!`}
         </h2>
-        <p className="text-lg opacity-90">Announcement closes in {timeLeft} seconds</p>
+        <p className="text-lg opacity-90">Restarting in {timeLeft} seconds</p>
+        {/* <button
+          onClick={restartGame}
+          className="mt-4 bg-white text-indigo-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          OK
+        </button> */}
       </div>
     </div>
   );

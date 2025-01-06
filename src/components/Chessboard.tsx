@@ -4,7 +4,7 @@ import { Chess } from 'chess.js';
 
 interface ChessboardProps {
   position?: string;
-  onMove?: (move: { from: string; to: string }) => void;
+  onMove?: (move: { from: string; to: string; promotion?: string }) => void;
   orientation?: 'white' | 'black';
   disabled?: boolean;
   gameState: { checkedKing: 'white' | 'black' | null };
@@ -19,7 +19,8 @@ export function Chessboard({
 }: ChessboardProps) {
   const [chess] = useState(() => new Chess(position));
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
-  
+  const [promotionMove, setPromotionMove] = useState<{ from: string; to: string } | null>(null);
+
   // Keep track of the current position
   const currentPositionRef = useRef(position);
   if (position !== currentPositionRef.current) {
@@ -46,11 +47,23 @@ export function Chessboard({
 
     // If a piece is selected and clicking on a different square
     if (selectedSquare) {
+      const move = {
+        from: selectedSquare,
+        to: square,
+      };
+
+      // Check if the move is a pawn promotion
+      const promotionPiece = chess.get(selectedSquare);
+      if (promotionPiece?.type === 'p' && (square[1] === '1' || square[1] === '8')) {
+        setPromotionMove(move);
+        return;
+      }
+
       try {
         const moveAttempt = chess.move({
           from: selectedSquare,
           to: square,
-          promotion: 'q',
+          promotion: 'q', // Default to queen if no promotion is selected
         });
 
         if (moveAttempt !== null && onMove) {
@@ -66,14 +79,26 @@ export function Chessboard({
   const onDrop = (sourceSquare: string, targetSquare: string) => {
     if (disabled) return false;
 
+    const move = {
+      from: sourceSquare,
+      to: targetSquare,
+    };
+
+    // Check if the move is a pawn promotion
+    const promotionPiece = chess.get(sourceSquare);
+    if (promotionPiece?.type === 'p' && (targetSquare[1] === '1' || targetSquare[1] === '8')) {
+      setPromotionMove(move);
+      return false;
+    }
+
     try {
-      const move = chess.move({
+      const moveAttempt = chess.move({
         from: sourceSquare,
         to: targetSquare,
-        promotion: 'q',
+        promotion: 'q', // Default to queen if no promotion is selected
       });
 
-      if (move === null) return false;
+      if (moveAttempt === null) return false;
 
       if (onMove) {
         onMove({ from: sourceSquare, to: targetSquare });
@@ -83,6 +108,27 @@ export function Chessboard({
     } catch {
       return false;
     }
+  };
+
+  const handlePromotion = (promotion: 'q' | 'r' | 'b' | 'n') => {
+    if (!promotionMove) return;
+
+    try {
+      const moveAttempt = chess.move({
+        from: promotionMove.from,
+        to: promotionMove.to,
+        promotion,
+      });
+
+      if (moveAttempt !== null && onMove) {
+        onMove({ from: promotionMove.from, to: promotionMove.to, promotion });
+      }
+    } catch (error) {
+      // Invalid move - do nothing
+    }
+
+    setPromotionMove(null);
+    setSelectedSquare(null);
   };
 
   const getCustomSquareStyles = () => {
@@ -157,6 +203,39 @@ export function Chessboard({
         }}
         customSquareStyles={getCustomSquareStyles()}
       />
+      {promotionMove && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">Promote Pawn</h2>
+            <div className="flex gap-4">
+              <button
+                onClick={() => handlePromotion('q')}
+                className="bg-gray-100 hover:bg-gray-200 p-4 rounded-lg transition duration-200"
+              >
+                <img src="/images/queen.png" alt="Queen" className="w-12 h-12" />
+              </button>
+              <button
+                onClick={() => handlePromotion('r')}
+                className="bg-gray-100 hover:bg-gray-200 p-4 rounded-lg transition duration-200"
+              >
+                <img src="/images/rook.png" alt="Rook" className="w-12 h-12" />
+              </button>
+              <button
+                onClick={() => handlePromotion('b')}
+                className="bg-gray-100 hover:bg-gray-200 p-4 rounded-lg transition duration-200"
+              >
+                <img src="/images/bishop.png" alt="Bishop" className="w-12 h-12" />
+              </button>
+              <button
+                onClick={() => handlePromotion('n')}
+                className="bg-gray-100 hover:bg-gray-200 p-4 rounded-lg transition duration-200"
+              >
+                <img src="/images/knight.png" alt="Knight" className="w-12 h-12" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
