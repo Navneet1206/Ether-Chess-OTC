@@ -6,44 +6,13 @@ import { ethers } from 'ethers';
 import { useGameStore } from '../store/useGameStore';
 import { AlertCircle, Check, Loader2, ArrowUp, ArrowDown } from 'lucide-react';
 import { Chess } from 'chess.js';
+import { Button } from '../components/Button'; // Import extracted components
+import { Input } from '../components/Input'; // Import extracted components
+import { Dialog } from '../components/Dialog'; // Import extracted components
 
-const Button = ({ children, onClick, disabled, variant = 'primary', className = '', loading = false }) => {
-  const baseStyles = "px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2";
-  const variants = {
-    primary: "bg-indigo-600 hover:bg-indigo-500 text-white disabled:hover:bg-indigo-600",
-    secondary: "bg-gray-700 hover:bg-gray-600 text-white",
-    outline: "border border-white/10 bg-gray-800 hover:bg-gray-700 text-white"
-  };
-
-  return (
-    <button onClick={onClick} disabled={disabled || loading} className={`${baseStyles} ${variants[variant]} ${className}`}>
-      {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-      {children}
-    </button>
-  );
-};
-
-const Input = ({ label, ...props }) => (
-  <div className="space-y-2">
-    {label && <label className="block text-sm font-medium text-white">{label}</label>}
-    <input {...props} className="w-full px-4 py-3 bg-gray-800 text-white border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-  </div>
-);
-
-const Dialog = ({ open, onClose, title, description, children }) => {
-  if (!open) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-gray-900 rounded-lg p-6 max-w-md w-full mx-4 space-y-4 border border-white/10">
-        {title && <h2 className="text-xl font-semibold text-white">{title}</h2>}
-        {description && <p className="text-gray-300">{description}</p>}
-        {children}
-      </div>
-    </div>
-  );
-};
+const MIN_STAKE = 0.0001;
+const MAX_STAKE = 0.1;
+const STAKE_INCREMENT = 0.0001;
 
 const chessGameABI = [
   "function createGame(string calldata gameId) external payable",
@@ -55,7 +24,7 @@ export const OnlineMode = () => {
   const { address, signer, provider } = useWalletStore();
   const { gameState, setGameState } = useGameStore();
   const [gameId, setGameId] = useState(null);
-  const [stake, setStake] = useState(0.0001);
+  const [stake, setStake] = useState(MIN_STAKE);
   const [error, setError] = useState(null);
   const [contractAddress] = useState('0xA12E9052EDbffCA633eBe3Fc9B3F477E516d4D43');
   const [isJoinGameDialogOpen, setIsJoinGameDialogOpen] = useState(false);
@@ -66,10 +35,6 @@ export const OnlineMode = () => {
   const [isJoiningGame, setIsJoiningGame] = useState(false);
   const [isVerifyingGame, setIsVerifyingGame] = useState(false);
   const [game] = useState(new Chess());
-
-  const MIN_STAKE = 0.0001;
-  const MAX_STAKE = 0.1;
-  const STAKE_INCREMENT = 0.0001;
 
   useEffect(() => {
     if (gameState?.gameId) {
