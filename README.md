@@ -146,7 +146,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Navneet1206/online-chess-game.git
+   git clone https://github.com/Navneet1206/Ether-Chess-OTC
    ```
 2. Install dependencies in main folder:
    ```bash
